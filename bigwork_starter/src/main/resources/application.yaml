@@ -1,0 +1,5 @@
+# 服务器配置
+server:
+  port: 8081  # 应用程序运行的端口号
+swagger:
+  enable: true
