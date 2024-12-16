@@ -1,0 +1,19 @@
+# 服务器配置
+server:
+  port: 8083  # 应用程序运行的端口号
+  servlet:
+    context-path: /apitest
+  datasource:
+    username: root
+    password: "chen160213497"
+    url: jdbc:mysql://localhost:3306/big_work_db?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+swagger:
+  enable: true #http://localhost:8083/apitest/swagger-ui.html
+
+springdoc:
+  api-docs:
+    path: "/v3/api-docs"
+  springdoc:
+    swagger-ui:
+      path: "/swagger-ui.html"
