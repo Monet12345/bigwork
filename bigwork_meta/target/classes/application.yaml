@@ -3,6 +3,7 @@ server:
   port: 8082  # 应用程序运行的端口号
   servlet:
     context-path: /meta
+spring:
   datasource:
     username: root
     password: "chen160213497"
