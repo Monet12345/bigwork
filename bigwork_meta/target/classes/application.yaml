@@ -10,3 +10,6 @@ server:
     driver-class-name: com.mysql.cj.jdbc.Driver
 swagger:
   enable: true
+mybatis:
+  mapper-locations: classpath*:mapper/*.xml
+  type-aliases-package: com.starter.bigwork_meta.model

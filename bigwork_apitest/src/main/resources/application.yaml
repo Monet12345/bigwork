@@ -3,6 +3,7 @@ server:
   port: 8083  # 应用程序运行的端口号
   servlet:
     context-path: /apitest
+spring:
   datasource:
     username: root
     password: "chen160213497"
@@ -10,10 +11,6 @@ server:
     driver-class-name: com.mysql.cj.jdbc.Driver
 swagger:
   enable: true
-
-springdoc:
-  api-docs:
-    path: "/v3/api-docs"
-  springdoc:
-    swagger-ui:
-      path: "/swagger-ui.html"
+mybatis:
+  mapper-locations: classpath*:mapper/*.xml
+  type-aliases-package: com.starter.bigwork_apitest.model
