@@ -8,4 +8,5 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @ConditionalOnProperty(name = "swagger.enable", havingValue = "true")
 public class SwaggerConfig {}
+
 //http://localhost:8083/apitest/swagger-ui.html
