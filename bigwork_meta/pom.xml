@@ -15,10 +15,16 @@
     </properties>
     <dependencies>
         <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-spring-boot-starter</artifactId>
+            <version>1.9.0</version>
+        </dependency>
+        <dependency>
             <groupId>com.starter</groupId>
             <artifactId>bigwork_starter</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+
 
     </dependencies>
     <dependencyManagement>
