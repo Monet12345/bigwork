@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bigwork.bigwork_meta.dal.mapper.UserMapper">
+
+    <resultMap id="resultMap" type="com.bigwork.bigwork_meta.dal.modle.UserDo">
+        <id property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="password" column="password"/>
+        <result property="salt" column="salt"/>
+        <result property="workspaceId" column="workspace_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <sql id="columns">
+        user_id, user_name, nick_name, password, salt, create_time, update_time
+    </sql>
+
+    <insert id="add" parameterType="com.bigwork.bigwork_meta.dal.modle.UserDo"  useGeneratedKeys="true" keyProperty="userId">
+        INSERT INTO user_db (user_id, user_name, nick_name, password, salt, create_time, update_time)
+        VALUES (UUID(), ${userName}, ${nickName}, ${password}, ${salt}, ${createTime}, ${updateTime}})
+    </insert>
+
+    <select id="selectByUserName" resultMap="resultMap">
+        select <include refid="columns"/>
+        where user_name = #{userName}
+        and workspace_id = #{workspaceId}
+    </select>
+</mapper>
