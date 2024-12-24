@@ -3,7 +3,7 @@
 // (powered by FernFlower decompiler)
 //
 
-package Util;
+package util;
 
 public class BizException extends RuntimeException {
 
