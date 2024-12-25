@@ -4,6 +4,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
 import com.bigwork.bigwork_meta.dal.mapper.UserMapper;
 import com.bigwork.bigwork_meta.dal.modle.UserDo;
+import com.bigwork.bigwork_meta.service.IdManagementService;
 import com.bigwork.bigwork_meta.service.UserService;
 import com.bigwork.bigwork_meta.web.model.LoginReq;
 import org.apache.commons.codec.binary.Hex;
@@ -23,6 +24,7 @@ import static cn.hutool.core.date.DateUtil.now;
 public class UserServiceImpl implements UserService {
   @Resource
   private UserMapper userMapper;
+  @Resource private IdManagementService idManagementService;
 
   private static final int SALT_LENGTH = 16; // 盐的长度
 
@@ -36,7 +38,7 @@ public class UserServiceImpl implements UserService {
       throw new BizException("用户名或密码错误");
     }
 
-    StpUtil.setLoginId(userDo.getUserId());
+    StpUtil.login(userDo.getUserId());
   }
 
   @Override
@@ -49,7 +51,7 @@ public class UserServiceImpl implements UserService {
     userDo.setCreateTime(now());
     userDo.setUpdateTime(now());
     userDo = creatPassword(userDo);
-
+    userDo.setWorkspaceId(idManagementService.getNextId("u"));
     userMapper.add(userDo);
   }
 

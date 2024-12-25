@@ -7,4 +7,4 @@ swagger:
 bigwork:
     meta:
         server: http://localhost:8082
-        path: /meta
+        path: /

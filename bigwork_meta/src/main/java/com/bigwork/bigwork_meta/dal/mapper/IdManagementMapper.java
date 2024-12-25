@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Mapper
 public interface IdManagementMapper {
-  public Long getByKey(String head);
-  public int update(String head,Long value,Date updateTime);
-  public void insert(String head, Long value, Date createTime, Date updateTime);
+   Long getByKey(String head);
+   int update(String head,Long value,Date updateTime);
+   void insert(String head, Long value, Date createTime, Date updateTime);
 }
