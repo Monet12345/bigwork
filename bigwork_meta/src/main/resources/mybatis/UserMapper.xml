@@ -8,16 +8,21 @@
         <result property="nickName" column="nick_name"/>
         <result property="password" column="password"/>
         <result property="workspaceId" column="workspace_id"/>
-        <result property="createTime" column="create_time"/>
-        <result property="updateTime" column="update_time"/>
+        <result property="createTime" column="gmt_creat"/>
+        <result property="updateTime" column="gmt_update"/>
     </resultMap>
     <sql id="columns">
-        user_id, user_name, nick_name, password, salt, create_time, update_time
+        user_id,
+        user_name,
+        nick_name,
+        password,
+        create_time,
+        update_time
     </sql>
 
     <insert id="add" parameterType="com.bigwork.bigwork_meta.dal.modle.UserDo"  useGeneratedKeys="true" keyProperty="userId">
-        INSERT INTO user_db (user_id, user_name, nick_name, password, create_time, update_time)
-        VALUES (UUID(), ${userName}, ${nickName}, ${password}, ${createTime}, ${updateTime}})
+        INSERT INTO user_db (user_id, user_name, nick_name, password, gmt_creat, gmt_update)
+        VALUES (UUID(), ${userName}, ${nickName}, ${password}, ${createTime}, ${updateTime})
     </insert>
 
     <select id="selectByUserName" resultMap="resultMap">

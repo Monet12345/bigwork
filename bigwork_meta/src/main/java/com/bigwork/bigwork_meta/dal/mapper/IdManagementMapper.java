@@ -1,6 +1,6 @@
 package com.bigwork.bigwork_meta.dal.mapper;
 
-import org.mapstruct.Mapper;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.Date;
 

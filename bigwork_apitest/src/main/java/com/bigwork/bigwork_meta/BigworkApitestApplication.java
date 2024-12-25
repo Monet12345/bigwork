@@ -1,4 +1,4 @@
-package com.bigwork.bigwork_apitest;
+package com.bigwork.bigwork_meta;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

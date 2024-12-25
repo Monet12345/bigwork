@@ -6,7 +6,7 @@
         <artifactId>bigwork_starter</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>bigwork_apitest</artifactId>
+    <artifactId>bigwork_meta</artifactId>
     <name>bigwork_meta</name>
     <description>bigwork_meta</description>
     <dependencies>

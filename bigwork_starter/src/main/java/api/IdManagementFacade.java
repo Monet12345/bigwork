@@ -1,4 +1,5 @@
 package api;
+
 import io.swagger.annotations.ApiOperation;
 import model.Result;
 import org.springframework.cloud.openfeign.FeignClient;
