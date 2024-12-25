@@ -1,4 +1,0 @@
-model\Result.class
-api\IdManagementFacade.class
-util\BizException.class
-model\User.class
