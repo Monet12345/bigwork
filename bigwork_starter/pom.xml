@@ -46,6 +46,12 @@
     </dependencyManagement>
 
     <dependencies>
+        <!--spring-boot-redis所需依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>

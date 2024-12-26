@@ -1,20 +1,19 @@
 package com.bigwork.bigwork_meta.web.controller;
 
 
-import cn.dev33.satoken.annotation.SaCheckLogin;
-import cn.dev33.satoken.annotation.SaIgnore;
-import cn.dev33.satoken.stp.StpUtil;
+
 import com.bigwork.bigwork_meta.service.UserService;
+import com.bigwork.bigwork_meta.web.model.CaptchaVo;
 import com.bigwork.bigwork_meta.web.model.LoginReq;
+
+import com.wf.captcha.base.Captcha;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import model.Result;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+
 
 @RestController
 @RequestMapping("/user")
@@ -36,6 +35,13 @@ public class UserController {
     userService.register(req);
     return Result.buildSuccess("注册成功");
   }
+
+  @GetMapping("/captcha")
+  @ApiOperation(value = "获取验证码")
+  public Result<CaptchaVo> captcha(){
+    return Result.buildSuccess(userService.getCaptcha());
+  }
+
 
 
 
