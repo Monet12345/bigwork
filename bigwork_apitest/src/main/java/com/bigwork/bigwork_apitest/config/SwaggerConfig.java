@@ -1,4 +1,4 @@
-package com.bigwork.bigwork_meta.config;
+package com.bigwork.bigwork_apitest.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,20 +14,20 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig {
 
-  @Bean
-  public Docket createRestApi(){
-    return new Docket(DocumentationType.SWAGGER_2)
-        .apiInfo(apiInfo())
-        .select()
-        .apis(RequestHandlerSelectors.basePackage("com.bigwork.bigwork_meta.web.controller"))
-        .paths(PathSelectors.any())
-        .build();
-  }
+    @Bean
+    public Docket createRestApi(){
+        return new Docket(DocumentationType.SWAGGER_2)
+            .apiInfo(apiInfo())
+            .select()
+            .apis(RequestHandlerSelectors.basePackage("com.bigwork.bigwork_apitest"))
+            .paths(PathSelectors.any())
+            .build();
+    }
 
-  private ApiInfo apiInfo(){
-    return new ApiInfoBuilder()
-        .title("xx平台")
-        .description("xx平台")
-        .build();
-  }
+    private ApiInfo apiInfo(){
+        return new ApiInfoBuilder()
+            .title("xx平台")
+            .description("xx平台")
+            .build();
+    }
 }

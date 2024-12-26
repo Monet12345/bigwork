@@ -15,5 +15,12 @@
             <artifactId>bigwork_starter</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <!-- Sa-Token 权限认证，在线文档：https://sa-token.cc -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-spring-boot-starter</artifactId>
+
+        </dependency>
+
     </dependencies>
 </project>

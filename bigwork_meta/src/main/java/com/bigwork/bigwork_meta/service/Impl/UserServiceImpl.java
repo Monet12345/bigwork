@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
     if (StpUtil.isLogin()) {
       throw new BizException("已登录");
     }
-    UserDo userDo = userMapper.selectByUserName(req.getUsername(), req.getWorkspaceId());
+    UserDo userDo = userMapper.selectByUserName(req.getUserName(), req.getWorkspaceId());
     if (userDo == null || !checkPassword(userDo, req.getPassword())) {
       throw new BizException("用户名或密码错误");
     }
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public void register(LoginReq req) {
-    UserDo row = userMapper.selectByUserName(req.getUsername(), req.getWorkspaceId());
+    UserDo row = userMapper.selectByUserName(req.getUserName(), req.getWorkspaceId());
     if(row!=null){
       throw new BizException("用户已存在");
     }
@@ -51,7 +51,8 @@ public class UserServiceImpl implements UserService {
     userDo.setCreateTime(now());
     userDo.setUpdateTime(now());
     userDo = creatPassword(userDo);
-    userDo.setWorkspaceId(idManagementService.getNextId("u"));
+    userDo.setWorkspaceId(req.getWorkspaceId());
+    userDo.setNickName("未定义昵称（请自行修改昵称）");
     userMapper.add(userDo);
   }
 
