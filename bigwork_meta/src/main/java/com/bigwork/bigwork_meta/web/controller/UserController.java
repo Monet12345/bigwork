@@ -2,6 +2,7 @@ package com.bigwork.bigwork_meta.web.controller;
 
 
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.bigwork.bigwork_meta.service.UserService;
 import com.bigwork.bigwork_meta.web.model.CaptchaVo;
 import com.bigwork.bigwork_meta.web.model.LoginReq;
@@ -42,6 +43,19 @@ public class UserController {
     return Result.buildSuccess(userService.getCaptcha());
   }
 
+  @GetMapping("/logout")
+  @ApiOperation(value = "退出登录")
+  public Result<String> logout(){
+    if(StpUtil.isLogin()){
+      StpUtil.logout();
+      return Result.buildSuccess("退出成功");
+    }
+    else{
+      return Result.buildFailure("本来就未登录");
+    }
+
+
+  }
 
 
 
