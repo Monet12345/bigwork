@@ -20,10 +20,11 @@
         gmt_update
     </sql>
 
-    <insert id="add" parameterType="com.bigwork.bigwork_meta.dal.modle.UserDo"  useGeneratedKeys="true" keyProperty="userId">
-        INSERT INTO user_db (user_id, user_name, nick_name, password, gmt_creat, gmt_update,workspace_id)
-        VALUES (UUID(), #{userName}, #{nickName}, #{password}, #{createTime}, #{updateTime},#{workspaceId})
+    <insert id="add" parameterType="com.bigwork.bigwork_meta.dal.modle.UserDo" >
+        INSERT INTO user_db (user_id,user_name, nick_name, password, gmt_creat, gmt_update, workspace_id)
+        VALUES (#{userDo.userId},#{userDo.userName}, #{userDo.nickName}, #{userDo.password}, #{userDo.createTime}, #{userDo.updateTime}, #{userDo.workspaceId})
     </insert>
+
 
     <select id="selectByUserName" resultMap="resultMap">
         select <include refid="columns"/>

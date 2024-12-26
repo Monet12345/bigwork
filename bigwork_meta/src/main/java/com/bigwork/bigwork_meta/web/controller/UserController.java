@@ -8,7 +8,7 @@ import com.bigwork.bigwork_meta.service.UserService;
 import com.bigwork.bigwork_meta.web.model.CaptchaVo;
 import com.bigwork.bigwork_meta.web.model.LoginReq;
 
-import com.wf.captcha.base.Captcha;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import model.Result;

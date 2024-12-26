@@ -71,6 +71,7 @@ public class UserServiceImpl implements UserService {
     userDo.setUpdateTime(now());
     userDo = creatPassword(userDo);
     userDo.setWorkspaceId(req.getWorkspaceId());
+    userDo.setUserId(UUID.randomUUID().toString());
     userDo.setNickName("未定义昵称（请自行修改昵称）");
     userMapper.add(userDo);
   }

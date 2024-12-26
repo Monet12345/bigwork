@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface UserMapper {
-  int add(UserDo userDo);
+  int add(@Param("userDo")UserDo userDo);
   UserDo selectByUserName(@Param("userName") String userName,@Param("workspaceId") String workspaceId);
 
 }
