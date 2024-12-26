@@ -1,5 +1,7 @@
 package com.bigwork.bigwork_meta.service.Impl;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
 import com.bigwork.bigwork_meta.dal.mapper.UserMapper;
@@ -21,6 +23,7 @@ import java.security.SecureRandom;
 import static cn.hutool.core.date.DateUtil.now;
 
 @Component
+
 public class UserServiceImpl implements UserService {
   @Resource
   private UserMapper userMapper;
@@ -29,6 +32,7 @@ public class UserServiceImpl implements UserService {
   private static final int SALT_LENGTH = 16; // 盐的长度
 
   @Override
+
   public void login(LoginReq req) {
     if (StpUtil.isLogin()) {
       throw new BizException("已登录");

@@ -1,5 +1,6 @@
-package com.bigwork.bigwork_meta.config;
+package com.bigwork.bigwork_meta.common;
 
+import cn.dev33.satoken.exception.NotLoginException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,12 @@ public class GlobalExceptionHandler {
     logger.error("Business exception occurred: {}", ex.getMessage(), ex);
     ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+  }
+  @ExceptionHandler(NotLoginException.class)
+  public ResponseEntity<ErrorResponse> handleGenericException(NotLoginException ex) {
+    logger.error("Business exception occurred:登录校验未通过， {}", ex.getMessage(), ex);
+    ErrorResponse errorResponse = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "登录校验未通过");
+    return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   @ExceptionHandler(Exception.class)

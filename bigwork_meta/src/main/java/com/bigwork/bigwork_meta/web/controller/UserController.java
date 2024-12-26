@@ -1,6 +1,7 @@
 package com.bigwork.bigwork_meta.web.controller;
 
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaIgnore;
 import cn.dev33.satoken.stp.StpUtil;
 import com.bigwork.bigwork_meta.service.UserService;
@@ -18,10 +19,12 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/user")
 @Api(tags = "用户相关接口")
+
 public class UserController {
   @Resource private UserService userService;
   @PostMapping("/login")
   @ApiOperation(value = "登录")
+
   public Result<String> login(@RequestBody LoginReq req) {
     userService.login(req);
 
