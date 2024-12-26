@@ -2,6 +2,7 @@ package com.bigwork.bigwork_meta.web.controller;
 
 
 
+import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import com.bigwork.bigwork_meta.service.UserService;
 import com.bigwork.bigwork_meta.web.model.CaptchaVo;
@@ -25,10 +26,9 @@ public class UserController {
   @PostMapping("/login")
   @ApiOperation(value = "登录")
 
-  public Result<String> login(@RequestBody LoginReq req) {
-    userService.login(req);
+  public Result<SaTokenInfo> login(@RequestBody LoginReq req) {
 
-    return Result.buildSuccess("登录成功");
+    return Result.buildSuccess(userService.login(req));
   }
   @PostMapping("/register")
   @ApiOperation(value = "注册")

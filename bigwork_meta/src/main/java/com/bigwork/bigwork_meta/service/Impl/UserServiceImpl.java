@@ -1,13 +1,10 @@
 package com.bigwork.bigwork_meta.service.Impl;
 
-import cn.dev33.satoken.annotation.SaCheckLogin;
-import cn.dev33.satoken.annotation.SaCheckRole;
+import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
-import com.bigwork.bigwork_meta.common.RedisConfig;
 import com.bigwork.bigwork_meta.dal.mapper.UserMapper;
 import com.bigwork.bigwork_meta.dal.modle.UserDo;
-import com.bigwork.bigwork_meta.service.IdManagementService;
 import com.bigwork.bigwork_meta.service.UserService;
 import com.bigwork.bigwork_meta.web.model.CaptchaVo;
 import com.bigwork.bigwork_meta.web.model.LoginReq;
@@ -39,7 +36,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
 
-  public void login(LoginReq req) {
+  public SaTokenInfo login(LoginReq req) {
     if (StpUtil.isLogin()) {
       throw new BizException("已登录");
     }
@@ -54,8 +51,13 @@ public class UserServiceImpl implements UserService {
     if (userDo == null || !checkPassword(userDo, req.getPassword())) {
       throw new BizException("用户名或密码错误");
     }
-
-    StpUtil.login(userDo.getUserId());
+    try {
+      StpUtil.login(userDo.getUserId());
+    }
+    catch (Exception e){
+      throw new BizException("登录失败",e);
+    }
+    return StpUtil.getTokenInfo();
   }
 
   @Override
