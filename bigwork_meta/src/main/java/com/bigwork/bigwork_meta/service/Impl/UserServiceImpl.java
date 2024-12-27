@@ -89,6 +89,11 @@ public class UserServiceImpl implements UserService {
     return captchaVo;
   }
 
+  @Override
+  public void loginByGithub() {
+
+  }
+
   boolean checkPassword(UserDo userDo, String password) {
     String[] parts = userDo.getPassword().split("\\$");//盐和密码以$分割存在数据库当中
     if (parts.length != 2) {

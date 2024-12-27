@@ -57,6 +57,15 @@ public class UserController {
 
   }
 
+  @GetMapping("/login/github")
+  @ApiOperation(value = "使用github登录")
+  public Result<String> loginByGithub(){
+
+    userService.loginByGithub();
+    return Result.buildSuccess("登录成功");
+
+  }
+
 
 
 }
