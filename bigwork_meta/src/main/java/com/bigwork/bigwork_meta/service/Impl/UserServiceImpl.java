@@ -93,6 +93,9 @@ public class UserServiceImpl implements UserService {
   public void loginByGithub() {
 
   }
+  //https://github.com/login/oauth/authorize?response_type=code&client_id=Ov23lilFmwrnT9298kxG&redirect_uri=http://localhost:8082/meta/test/&scope=openid
+  //https://github.com/login/oauth/access_token?grant_type=authorization_code&client_id=Ov23lilFmwrnT9298kxG&client_secret=2b064aab541e2cf3fc47f0af6039d5a5352fd4bc&code=eb711ec511b7bae58920
+
 
   boolean checkPassword(UserDo userDo, String password) {
     String[] parts = userDo.getPassword().split("\\$");//盐和密码以$分割存在数据库当中
