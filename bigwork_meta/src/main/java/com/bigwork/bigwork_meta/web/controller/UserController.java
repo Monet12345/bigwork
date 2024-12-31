@@ -54,13 +54,11 @@ public class UserController {
     else{
       return Result.buildFailure("本来就未登录");
     }
-
-
   }
 
   @GetMapping("/login/github")
   @ApiOperation(value = "使用github登录，请求这个接口会返回给前端一个url，前端需要请求这个url来获取用户信息")
-  public Result<String> loginByGithub() throws IOException, InterruptedException {
+  public Result<String> loginByGithub() {
 
     return Result.buildSuccess("https://github.com/login/oauth/authorize?client_id=Ov23lilFmwrnT9298kxG&redirect_uri=http://localhost:8082/meta/user/login/github/callback");
 

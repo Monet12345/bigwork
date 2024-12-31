@@ -127,6 +127,7 @@ public class UserServiceImpl implements UserService {
       throw new BizException("获取用户信息失败，状态码：" + responseAskUser.statusCode());
     }
 
+
     System.out.println(responseAskUser.body());
   }
   public String extractAccessToken(String responseBody) {
@@ -151,6 +152,10 @@ public class UserServiceImpl implements UserService {
 
   //https://github.com/login/oauth/authorize?client_id=Ov23lilFmwrnT9298kxG&redirect_uri=http://localhost:8082/meta/test/&scope=openid
   //https://github.com/login/oauth/access_token?client_id=Ov23lilFmwrnT9298kxG&client_secret=2b064aab541e2cf3fc47f0af6039d5a5352fd4bc&code=eb711ec511b7bae58920
+
+
+
+
 
 
   boolean checkPassword(UserDo userDo, String password) {
