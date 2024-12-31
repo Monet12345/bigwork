@@ -16,6 +16,11 @@ import org.springframework.stereotype.Component;
 import util.BizException;
 
 import javax.annotation.Resource;
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -89,12 +94,63 @@ public class UserServiceImpl implements UserService {
     return captchaVo;
   }
 
-  @Override
-  public void loginByGithub() {
 
+  @Override
+  public void githubCallBack(String code) throws IOException, InterruptedException {
+    String githubUrl = "https://github.com/login/oauth/access_token?client_id=Ov23lilFmwrnT9298kxG&client_secret=2b064aab541e2cf3fc47f0af6039d5a5352fd4bc&code="+code;
+    // 创建HttpClient实例
+    HttpClient client = HttpClient.newHttpClient();
+
+    // 创建HttpRequest实例
+    HttpRequest request = HttpRequest.newBuilder()
+        .uri(URI.create(githubUrl))
+        .GET() // 指定请求方法为GET
+        .build();
+    // 发送请求并获取响应
+    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+    String body = response.body();//内含access_token和scope和token_type
+    String accessToken = extractAccessToken(body);
+
+    // 使用accessToken获取用户信息
+    String githubUserUrl = "https://api.github.com/user";
+    HttpRequest userRequest = HttpRequest.newBuilder()
+        .uri(URI.create(githubUserUrl))
+        .header("Authorization", "token " + accessToken) // 使用Authorization头传递访问令牌
+        .GET()
+        .build();
+
+    // 发送请求并获取响应
+    HttpResponse<String> responseAskUser = client.send(userRequest, HttpResponse.BodyHandlers.ofString());
+
+    if (responseAskUser.statusCode() != 200) {
+      throw new BizException("获取用户信息失败，状态码：" + responseAskUser.statusCode());
+    }
+
+    System.out.println(responseAskUser.body());
   }
-  //https://github.com/login/oauth/authorize?response_type=code&client_id=Ov23lilFmwrnT9298kxG&redirect_uri=http://localhost:8082/meta/test/&scope=openid
-  //https://github.com/login/oauth/access_token?grant_type=authorization_code&client_id=Ov23lilFmwrnT9298kxG&client_secret=2b064aab541e2cf3fc47f0af6039d5a5352fd4bc&code=eb711ec511b7bae58920
+  public String extractAccessToken(String responseBody) {
+    // 检查输入是否为空
+    if (responseBody == null || responseBody.isEmpty()) {
+      throw new BizException("响应体为空");
+    }
+    // 使用字符串操作来提取 access_token 的值
+    String accessTokenPrefix = "access_token=";
+    int startIndex = responseBody.indexOf(accessTokenPrefix);
+    if (startIndex == -1) {
+      throw new BizException("未找到 access_token");
+    }
+    startIndex += accessTokenPrefix.length();
+    int endIndex = responseBody.indexOf('&', startIndex);
+    if (endIndex == -1) {
+      endIndex = responseBody.length();
+    }
+
+    return responseBody.substring(startIndex, endIndex);
+  }
+
+  //https://github.com/login/oauth/authorize?client_id=Ov23lilFmwrnT9298kxG&redirect_uri=http://localhost:8082/meta/test/&scope=openid
+  //https://github.com/login/oauth/access_token?client_id=Ov23lilFmwrnT9298kxG&client_secret=2b064aab541e2cf3fc47f0af6039d5a5352fd4bc&code=eb711ec511b7bae58920
 
 
   boolean checkPassword(UserDo userDo, String password) {

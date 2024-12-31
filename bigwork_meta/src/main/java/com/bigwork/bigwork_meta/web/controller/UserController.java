@@ -15,6 +15,8 @@ import model.Result;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.io.IOException;
+
 
 
 @RestController
@@ -25,7 +27,6 @@ public class UserController {
   @Resource private UserService userService;
   @PostMapping("/login")
   @ApiOperation(value = "登录")
-
   public Result<SaTokenInfo> login(@RequestBody LoginReq req) {
 
     return Result.buildSuccess(userService.login(req));
@@ -58,11 +59,20 @@ public class UserController {
   }
 
   @GetMapping("/login/github")
-  @ApiOperation(value = "使用github登录")
-  public Result<String> loginByGithub(){
+  @ApiOperation(value = "使用github登录，请求这个接口会返回给前端一个url，前端需要请求这个url来获取用户信息")
+  public Result<String> loginByGithub() throws IOException, InterruptedException {
 
-    userService.loginByGithub();
-    return Result.buildSuccess("登录成功");
+    return Result.buildSuccess("https://github.com/login/oauth/authorize?client_id=Ov23lilFmwrnT9298kxG&redirect_uri=http://localhost:8082/meta/user/login/github/callback");
+
+  }
+
+  //请求github授权后的回调接口，github会携带code来调这边，这边再去请求拿到access_token
+  @GetMapping("/login/github/callback")
+  @ApiOperation(value = "github回调")
+  public Result loginByGithubCallback(@RequestParam String code) throws IOException, InterruptedException {
+
+    userService.githubCallBack(code);
+    return Result.buildSuccess();
 
   }
 
