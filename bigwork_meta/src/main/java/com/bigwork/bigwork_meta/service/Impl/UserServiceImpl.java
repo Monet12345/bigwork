@@ -3,11 +3,13 @@ package com.bigwork.bigwork_meta.service.Impl;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.json.JSONUtil;
 import com.bigwork.bigwork_meta.dal.mapper.UserMapper;
-import com.bigwork.bigwork_meta.dal.modle.UserDo;
+import com.bigwork.bigwork_meta.model.UserDo;
+import com.bigwork.bigwork_meta.model.GithubUser;
 import com.bigwork.bigwork_meta.service.UserService;
-import com.bigwork.bigwork_meta.web.model.CaptchaVo;
-import com.bigwork.bigwork_meta.web.model.LoginReq;
+import com.bigwork.bigwork_meta.model.CaptchaVo;
+import com.bigwork.bigwork_meta.model.LoginReq;
 import com.wf.captcha.SpecCaptcha;
 import org.apache.commons.codec.binary.Hex;
 import org.bouncycastle.util.encoders.DecoderException;
@@ -77,7 +79,9 @@ public class UserServiceImpl implements UserService {
     userDo = creatPassword(userDo);
     userDo.setWorkspaceId(req.getWorkspaceId());
     userDo.setUserId(UUID.randomUUID().toString());
-    userDo.setNickName("未定义昵称（请自行修改昵称）");
+    if(userDo.getNickName()==null){
+      userDo.setNickName("未定义昵称（请自行修改昵称）");
+    }
     userMapper.add(userDo);
   }
 
@@ -96,7 +100,7 @@ public class UserServiceImpl implements UserService {
 
 
   @Override
-  public void githubCallBack(String code) throws IOException, InterruptedException {
+  public void githubCallBack(String code,String workspaceId) throws IOException, InterruptedException {
     String githubUrl = "https://github.com/login/oauth/access_token?client_id=Ov23lilFmwrnT9298kxG&client_secret=2b064aab541e2cf3fc47f0af6039d5a5352fd4bc&code="+code;
     // 创建HttpClient实例
     HttpClient client = HttpClient.newHttpClient();
@@ -126,9 +130,24 @@ public class UserServiceImpl implements UserService {
     if (responseAskUser.statusCode() != 200) {
       throw new BizException("获取用户信息失败，状态码：" + responseAskUser.statusCode());
     }
+    GithubUser githubUser = JSONUtil.toBean(responseAskUser.body(), GithubUser.class);
+    githubUser.setWorkspaceId(workspaceId);
+    UserDo userDo = userMapper.selectByUserName("Github_"+githubUser.getUserName().toString(), githubUser.getWorkspaceId());
 
-
-    System.out.println(responseAskUser.body());
+    if(userDo!=null){
+      StpUtil.login(userDo.getUserId());
+    }
+    else{
+      LoginReq loginReq = BeanUtil.copyProperties(githubUser, LoginReq.class);
+      loginReq.setUserName("Github_"+githubUser.getUserName().toString());
+      loginReq.setPassword(UUID.randomUUID().toString());
+      register(loginReq);
+      userDo = userMapper.selectByUserName(githubUser.getUserName().toString(), githubUser.getWorkspaceId());
+      if(userDo==null){
+        throw new BizException("github账户注册失败，未入用户库");
+      }
+      StpUtil.login(userDo.getUserId());
+    }
   }
   public String extractAccessToken(String responseBody) {
     // 检查输入是否为空
