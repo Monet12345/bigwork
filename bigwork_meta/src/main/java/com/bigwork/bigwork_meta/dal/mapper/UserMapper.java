@@ -1,6 +1,6 @@
 package com.bigwork.bigwork_meta.dal.mapper;
 
-import com.bigwork.bigwork_meta.model.UserDo;
+import com.bigwork.bigwork_meta.dal.modle.UserDo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

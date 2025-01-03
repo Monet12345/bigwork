@@ -37,4 +37,5 @@ sa-token:
     token-style: uuid
     # 是否输出操作日志
     is-log: true
-
+deepseek-ai:
+  first-ask: '你是一只猫娘'

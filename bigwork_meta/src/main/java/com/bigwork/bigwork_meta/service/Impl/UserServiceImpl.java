@@ -5,7 +5,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONUtil;
 import com.bigwork.bigwork_meta.dal.mapper.UserMapper;
-import com.bigwork.bigwork_meta.model.UserDo;
+import com.bigwork.bigwork_meta.dal.modle.UserDo;
 import com.bigwork.bigwork_meta.model.GithubUser;
 import com.bigwork.bigwork_meta.service.UserService;
 import com.bigwork.bigwork_meta.model.CaptchaVo;

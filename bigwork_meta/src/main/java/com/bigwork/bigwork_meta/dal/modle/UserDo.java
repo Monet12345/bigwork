@@ -1,4 +1,4 @@
-package com.bigwork.bigwork_meta.model;
+package com.bigwork.bigwork_meta.dal.modle;
 
 import lombok.Data;
 

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bigwork.bigwork_meta.dal.mapper.DeepSeekMapper">
+
+
+    <sql id="columns">
+        workspace_id,
+        message,
+        gmt_create,
+        gmt_update
+    </sql>
+
+    <resultMap id="resultMap" type="DeepSeekDo">
+        <id property="workspaceId" column="workspace_id"/>
+        <result property="createTime" column="gmt_create"/>
+        <result property="updateTime" column="gmt_update"/>
+        <result property="deepSeekMessages" column="message"/>
+    </resultMap>
+
+    <update id="update">
+        update deepseek_db
+        set message = #{message}
+        where workspace_id = #{workspaceId}
+    </update>
+    <select id="getMessage" resultMap="resultMap">
+        select <include refid="columns"/>
+        from deepseek_db
+        where workspace_id = #{workspaceId}
+        LIMIT 1
+    </select>
+    <insert id="insert">
+         insert into deepseek_db(workspace_id,message,gmt_create,gmt_update)
+         values(#{deepSeekDo.workspaceId},#{deepSeekDo.deepSeekMessages},#{deepSeekDo.createTime},#{deepSeekDo.updateTime})
+    </insert>
+
+
+</mapper>
