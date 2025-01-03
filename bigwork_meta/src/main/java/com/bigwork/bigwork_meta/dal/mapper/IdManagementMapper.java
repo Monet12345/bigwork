@@ -8,6 +8,6 @@ import java.util.Date;
 @Mapper
 public interface IdManagementMapper {
    Long getByKey(@Param("head")String head);
-   int update(@Param("head")String head,@Param("Long")Long value,@Param("updateTime")Date updateTime);
-   void insert(@Param("head") String head, @Param("value") Long value, @Param("createdAt") Date createdAt, @Param("updatedAt") Date updatedAt);
+   int update(@Param("head")String head,@Param("value")Long value,@Param("updateTime")Date updateTime);
+   void insert(@Param("head") String head, @Param("value") Long value, @Param("createTime") Date createdAt, @Param("updateTime") Date updatedAt);
 }

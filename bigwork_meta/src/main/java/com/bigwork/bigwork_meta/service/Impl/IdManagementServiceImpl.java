@@ -10,6 +10,9 @@ import util.BizException;
 import javax.annotation.Resource;
 
 import java.util.Date;
+
+import static cn.hutool.core.date.DateTime.now;
+
 @Slf4j
 @Component
 public class IdManagementServiceImpl implements IdManagementService {
@@ -21,7 +24,7 @@ public class IdManagementServiceImpl implements IdManagementService {
     Long value = idManagementMapper.getByKey(head);
     if(value==null){
       try{
-        idManagementMapper.insert(head,1L,new Date(),new Date());
+        idManagementMapper.insert(head,1L,now(),now());
         return head+"1";
       }
       catch (DuplicateKeyException e){
