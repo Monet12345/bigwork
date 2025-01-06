@@ -7,9 +7,11 @@ import cn.hutool.json.JSONUtil;
 import com.bigwork.bigwork_meta.dal.mapper.UserMapper;
 import com.bigwork.bigwork_meta.dal.modle.UserDo;
 import com.bigwork.bigwork_meta.model.GithubUser;
+import com.bigwork.bigwork_meta.model.UserToken;
 import com.bigwork.bigwork_meta.service.UserService;
 import com.bigwork.bigwork_meta.model.CaptchaVo;
 import com.bigwork.bigwork_meta.model.LoginReq;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wf.captcha.SpecCaptcha;
 import org.apache.commons.codec.binary.Hex;
 import org.bouncycastle.util.encoders.DecoderException;
@@ -100,7 +102,7 @@ public class UserServiceImpl implements UserService {
 
 
   @Override
-  public void githubCallBack(String code,String workspaceId) throws IOException, InterruptedException {
+  public UserToken githubCallBack(String code,String workspaceId) throws IOException, InterruptedException {
     String githubUrl = "https://github.com/login/oauth/access_token?client_id=Ov23lilFmwrnT9298kxG&client_secret=2b064aab541e2cf3fc47f0af6039d5a5352fd4bc&code="+code;
     // 创建HttpClient实例
     HttpClient client = HttpClient.newHttpClient();
@@ -130,8 +132,13 @@ public class UserServiceImpl implements UserService {
     if (responseAskUser.statusCode() != 200) {
       throw new BizException("获取用户信息失败，状态码：" + responseAskUser.statusCode());
     }
-    GithubUser githubUser = JSONUtil.toBean(responseAskUser.body(), GithubUser.class);
+    ObjectMapper objectMapper = new ObjectMapper();
+    GithubUser githubUser = objectMapper.readValue(responseAskUser.body(), GithubUser.class);
+    // GithubUser githubUser = JSONUtil.toBean(responseAskUser.body(), GithubUser.class);
     githubUser.setWorkspaceId(workspaceId);
+
+
+
     UserDo userDo = userMapper.selectByUserName("Github_"+githubUser.getUserName().toString(), githubUser.getWorkspaceId());
 
     if(userDo!=null){
@@ -148,6 +155,12 @@ public class UserServiceImpl implements UserService {
       }
       StpUtil.login(userDo.getUserId());
     }
+    UserToken userToken = new UserToken();
+    userToken.setToken(StpUtil.getTokenValue());
+    userToken.setUserId(userDo.getUserId());
+    userToken.setTokenName(StpUtil.getTokenName());
+    userToken.setExpiresIn(String.valueOf(StpUtil.getTokenTimeout()));
+    return userToken;
   }
   public String extractAccessToken(String responseBody) {
     // 检查输入是否为空

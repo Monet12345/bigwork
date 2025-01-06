@@ -4,6 +4,7 @@ package com.bigwork.bigwork_meta.web.controller;
 
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
+import com.bigwork.bigwork_meta.model.UserToken;
 import com.bigwork.bigwork_meta.service.UserService;
 import com.bigwork.bigwork_meta.model.CaptchaVo;
 import com.bigwork.bigwork_meta.model.LoginReq;
@@ -67,10 +68,9 @@ public class UserController {
   //请求github授权后的回调接口，github会携带code来调这边，这边再去请求拿到access_token
   @GetMapping("/login/github/callback")
   @ApiOperation(value = "github回调")
-  public Result loginByGithubCallback(@RequestParam String code,String workspaceId) throws IOException, InterruptedException {
+  public Result<UserToken> loginByGithubCallback(@RequestParam String code, String workspaceId) throws IOException, InterruptedException {
 
-    userService.githubCallBack(code,workspaceId);
-    return Result.buildSuccess();
+    return Result.buildSuccess(userService.githubCallBack(code,workspaceId));
 
   }
 
