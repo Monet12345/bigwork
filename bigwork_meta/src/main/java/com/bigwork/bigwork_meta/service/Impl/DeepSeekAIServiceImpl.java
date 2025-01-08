@@ -110,9 +110,11 @@ public class DeepSeekAIServiceImpl implements DeepSeekAIService {
       System.err.println("Failed to extract message from JSON.");
     }
 
-
-
-
     return message2.getContent();
+  }
+  @Override
+  public String setFirstAskAndAsk(String firstAsk,String question,String workspaceId) throws IOException, InterruptedException {
+    this.firstAsk=firstAsk;
+    return this.ask(question,workspaceId);
   }
 }

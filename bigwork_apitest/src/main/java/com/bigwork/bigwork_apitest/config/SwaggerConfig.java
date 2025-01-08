@@ -26,8 +26,8 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo(){
         return new ApiInfoBuilder()
-            .title("xx平台")
-            .description("xx平台")
+            .title("聊天模块")
+            .description("聊天模块")
             .build();
     }
 }
