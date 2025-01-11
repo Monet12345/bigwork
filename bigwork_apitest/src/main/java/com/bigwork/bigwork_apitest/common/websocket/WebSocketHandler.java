@@ -1,4 +1,4 @@
-package com.bigwork.bigwork_meta.common.websocket;
+package com.bigwork.bigwork_apitest.common.websocket;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
