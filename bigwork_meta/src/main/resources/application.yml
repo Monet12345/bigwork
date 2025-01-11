@@ -1,6 +1,6 @@
 # 服务器配置
 server:
-  port: 8082  # 应用程序运行的端口号
+  port: 8086  # 应用程序运行的端口号
   servlet:
     context-path: /meta
 spring:

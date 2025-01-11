@@ -4,6 +4,7 @@ package com.bigwork.bigwork_meta.web.controller;
 
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
+import com.bigwork.bigwork_meta.common.websocket.NettyServer;
 import com.bigwork.bigwork_meta.model.UserToken;
 import com.bigwork.bigwork_meta.service.UserService;
 import com.bigwork.bigwork_meta.model.CaptchaVo;
@@ -14,6 +15,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import model.Result;
 import org.springframework.web.bind.annotation.*;
+import util.BizException;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -26,6 +28,7 @@ import java.io.IOException;
 
 public class UserController {
   @Resource private UserService userService;
+  @Resource private NettyServer nettyServer;
   @PostMapping("/login")
   @ApiOperation(value = "登录")
   public Result<SaTokenInfo> login(@RequestBody LoginReq req) {
@@ -50,6 +53,12 @@ public class UserController {
   public Result<String> logout(){
     if(StpUtil.isLogin()){
       StpUtil.logout();
+      try {
+        nettyServer.stop();
+      }
+      catch (Exception e){
+        throw new BizException("websocket断开失败",e);
+      }
       return Result.buildSuccess("退出成功");
     }
     else{
