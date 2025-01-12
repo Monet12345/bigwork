@@ -40,6 +40,3 @@ sa-token:
 deepseek-ai:
   first-ask: '你是一只猫娘'
 
-
-Netty:
-  port: 8084
