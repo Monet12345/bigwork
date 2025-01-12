@@ -1,4 +1,4 @@
-package com.bigwork.bigwork_meta.common;
+package common;
 
 import cn.dev33.satoken.exception.NotLoginException;
 
