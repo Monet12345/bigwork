@@ -3,8 +3,8 @@ package com.bigwork.bigwork_meta.service.Impl;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.json.JSONUtil;
-import com.bigwork.bigwork_meta.common.websocket.NettyServer;
+
+import com.bigwork.bigwork_meta.common.NettyServer;
 import com.bigwork.bigwork_meta.dal.mapper.UserMapper;
 import com.bigwork.bigwork_meta.dal.modle.UserDo;
 import com.bigwork.bigwork_meta.model.GithubUser;

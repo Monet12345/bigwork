@@ -1,6 +1,6 @@
 # 服务器配置
 server:
-  port: 8086  # 应用程序运行的端口号
+  port: 8082  # 应用程序运行的端口号
   servlet:
     context-path: /meta
 spring:
@@ -40,3 +40,6 @@ sa-token:
 deepseek-ai:
   first-ask: '你是一只猫娘'
 
+
+Netty:
+  port: 8084

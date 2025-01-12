@@ -1,4 +1,4 @@
-package com.bigwork.bigwork_apitest.common.websocket;
+package com.bigwork.bigwork_meta.common;
 
 import com.bigwork.bigwork_meta.service.WebsocketService;
 import io.netty.channel.Channel;
