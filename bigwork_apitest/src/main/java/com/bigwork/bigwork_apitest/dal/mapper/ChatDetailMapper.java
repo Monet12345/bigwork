@@ -1,4 +1,4 @@
-package com.bigwork.bigwork_apitest.dal;
+package com.bigwork.bigwork_apitest.dal.mapper;
 
 import org.mapstruct.Mapper;
 
