@@ -1,6 +1,8 @@
 package com.bigwork.bigwork_meta.common;
 
 import cn.dev33.satoken.exception.NotLoginException;
+
+import model.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -8,31 +10,39 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import util.BizException;
-import util.ErrorResponse;
-
 
 //全局异常捕获处理器
 @ControllerAdvice
 public class GlobalExceptionHandler {
   private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
+  /**
+   * 处理业务异常 BizException
+   */
   @ExceptionHandler(BizException.class)
-  public ResponseEntity<ErrorResponse> handleBizException(BizException ex) {
+  public ResponseEntity<Result<Void>> handleBizException(BizException ex) {
     logger.error("Business exception occurred: {}", ex.getMessage(), ex);
-    ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
-    return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-  }
-  @ExceptionHandler(NotLoginException.class)
-  public ResponseEntity<ErrorResponse> handleGenericException(NotLoginException ex) {
-    logger.error("Business exception occurred:登录校验未通过， {}", ex.getMessage(), ex);
-    ErrorResponse errorResponse = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "登录校验未通过");
-    return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    Result<Void> result = Result.buildFailure(ex.getMessage()); // 使用 Result 封装错误信息
+    return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
   }
 
+  /**
+   * 处理未登录异常 NotLoginException
+   */
+  @ExceptionHandler(NotLoginException.class)
+  public ResponseEntity<Result<Void>> handleNotLoginException(NotLoginException ex) {
+    logger.error("Login validation failed: {}", ex.getMessage(), ex);
+    Result<Void> result = Result.buildFailure("登录校验未通过"); // 使用 Result 封装错误信息
+    return new ResponseEntity<>(result, HttpStatus.UNAUTHORIZED);
+  }
+
+  /**
+   * 处理其他未捕获的异常
+   */
   @ExceptionHandler(Exception.class)
-  public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
+  public ResponseEntity<Result<Void>> handleGenericException(Exception ex) {
     logger.error("Unexpected exception occurred: {}", ex.getMessage(), ex);
-    ErrorResponse errorResponse = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal Server Error");
-    return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    Result<Void> result = Result.buildFailure("Internal Server Error"); // 使用 Result 封装错误信息
+    return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }
