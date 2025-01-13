@@ -68,12 +68,7 @@ public class UserServiceImpl implements UserService {
     catch (Exception e){
       throw new BizException("登录失败",e);
     }
-    try{
-      nettyServer.start();
-    }
-    catch (Exception e){
-      throw new BizException("建立websocket连接失败",e);
-    }
+
     return StpUtil.getTokenInfo();
   }
 

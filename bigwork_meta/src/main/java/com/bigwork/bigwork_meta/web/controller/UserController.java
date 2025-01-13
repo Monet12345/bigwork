@@ -70,7 +70,12 @@ public class UserController {
   @GetMapping("/login/github")
   @ApiOperation(value = "使用github登录，请求这个接口会返回给前端一个url，前端需要请求这个url来获取用户信息")
   public Result<String> loginByGithub() {
-
+    try{
+      nettyServer.start();
+    }
+    catch (Exception e){
+      throw new BizException("建立websocket连接失败",e);
+    }
     return Result.buildSuccess("https://github.com/login/oauth/authorize?client_id=Ov23lilFmwrnT9298kxG&redirect_uri=http://localhost:8082/meta/user/login/github/callback");
 
   }
