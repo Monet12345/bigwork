@@ -1,0 +1,46 @@
+services:
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+
+  app1:
+    build:
+      context: ./bigwork_meta
+      dockerfile: Dockerfile
+    container_name: bigwork_meta_app
+    ports:
+      - "8082:8082"
+      - "8084:8084"
+    environment:
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: "6379"
+    depends_on:
+      - redis
+    networks:
+      - app-network
+
+  app2:
+    build:
+      context: ./bigwork_apitest
+      dockerfile: Dockerfile
+    container_name: bigwork_apitest_app
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: "6379"
+    depends_on:
+      - redis
+    networks:
+      - app-network
+
+volumes:
+  redis_data:
+
+networks:
+  app-network:
+    driver: bridge
