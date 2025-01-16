@@ -1,0 +1,62 @@
+name: Docker Build and Deploy
+
+on:
+  push:
+    branches:
+      - iteration/*  # 只在 iteration/* 分支的 push 事件触发
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest  # 使用 GitHub 托管的 Ubuntu 运行器
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2  # 拉取代码
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: '17'  # 设置 Java 17 环境
+
+      - name: Build with Maven
+        run: |
+          cd bigwork_meta && mvn clean package
+          cd ../bigwork_apitest && mvn clean package
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}  # Docker Hub 用户名
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}  # Docker Hub 密码
+
+      - name: Build and push bigwork_meta image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./bigwork_meta  # Docker 构建上下文
+          push: true  # 推送镜像到 Docker Hub
+          tags: monet12345/bigwork_meta:meta  # 镜像标签
+
+      - name: Build and push bigwork_apitest image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./bigwork_apitest  # Docker 构建上下文
+          push: true  # 推送镜像到 Docker Hub
+          tags: monet12345/bigwork_apitest:apitest  # 镜像标签
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build-and-push  # 依赖 build-and-push 任务
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2  # 拉取代码
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master  # 使用 SSH 连接到服务器
+        with:
+          host: ${{ secrets.SERVER_HOST }}  # 服务器 IP 或域名
+          username: ${{ secrets.SERVER_USERNAME }}  # 服务器用户名
+          password: ${{ secrets.SERVER_PASSWORD }}  # 服务器密码
+          script: |
+            cd bigwork  # 进入项目目录
+            docker-compose down  # 停止当前运行的容器
+            docker-compose up -d  # 启动新的容器
