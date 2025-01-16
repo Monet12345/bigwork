@@ -3,8 +3,8 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.starter</groupId>
-        <artifactId>bigwork_starter</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <artifactId>bigwork-starter-boot</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>bigwork_apitest</artifactId>
     <name>bigwork_apitest</name>
@@ -48,7 +48,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring-boot.version}</version>
+                <version>2.7.3</version>
                 <configuration>
                     <mainClass>com.bigwork.bigwork_apitest.BigworkApitestApplication</mainClass>
                 </configuration>

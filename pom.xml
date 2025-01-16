@@ -6,13 +6,13 @@
     <groupId>com.starter</groupId> <!-- 你的项目组ID -->
     <artifactId>bigwork-starter-boot</artifactId> <!-- 你的项目ID -->
     <version>1.0.0-SNAPSHOT</version> <!-- 项目版本号 -->
-    <packaging>jar</packaging> <!-- 打包方式，可以是 jar、war 等 -->
+    <packaging>pom</packaging> <!-- 打包方式，可以是 jar、war 等 -->
 
     <!-- 父项目 -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.15</version>
+        <version>2.7.3</version>
     </parent>
 
     <!-- 项目属性 -->
@@ -59,15 +59,5 @@
         </plugins>
     </build>
 
-    <!-- 部署配置 -->
-    <distributionManagement>
-        <repository>
-            <id>nexus-releases</id>
-            <url>http://117.50.180.240:8081/repository/maven-releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>nexus-snapshots</id>
-            <url>http://117.50.180.240:8081/repository/maven-snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
+
 </project>
