@@ -5,10 +5,10 @@ FROM openjdk:17-jdk-alpine
 WORKDIR /app
 
 # 复制构建好的 JAR 文件到容器
-COPY ../target/bigwork_apitest-1.0.0-SNAPSHOT.jar bigwork_apitest-1.0.0-SNAPSHOT.jar
+COPY ../target/bigwork_meta-1.0.0-SNAPSHOT.jar bigwork_meta-1.0.0-SNAPSHOT.jar
 
 # 暴露端口
-EXPOSE 8083
+EXPOSE 8082 8084
 
 # 启动应用
-ENTRYPOINT ["java", "-jar", "bigwork_apitest-1.0.0-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "bigwork_meta-1.0.0-SNAPSHOT.jar"]
