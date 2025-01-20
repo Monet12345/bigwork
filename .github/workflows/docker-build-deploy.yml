@@ -26,16 +26,12 @@ jobs:
           restore-keys: |
             maven-Linux-  # 通用缓存键
 
-      - name: Configure Maven settings
-        run: |
-          mkdir -p ~/.m2
-          echo "<settings><servers><server><id>my-repo</id><username>${{ secrets.MAVEN_REPO_USERNAME }}</username><password>${{ secrets.MAVEN_REPO_PASSWORD }}</password></server></servers></settings>" > ~/.m2/settings.xml
-
       - name: Build with Maven
         run: |
-          cd bigwork_starter && mvn clean install -U -e -X  # 强制更新 SNAPSHOT 依赖并启用详细日志
-          cd ../bigwork_meta && mvn clean package -U -e -X
-          cd ../bigwork_apitest && mvn clean package -U -e -X
+          ls -R  # 打印目录结构，检查路径
+          cd bigwork_starter && mvn clean install -e -X
+          cd ../bigwork_meta && mvn clean package -e -X
+          cd ../bigwork_apitest && mvn clean package  # 最后构建 bigwork_apitest
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
