@@ -20,8 +20,9 @@ jobs:
 
       - name: Build with Maven
         run: |
-          cd bigwork_meta && mvn clean package
-          cd ../bigwork_apitest && mvn clean package
+          cd bigwork_starter && mvn clean install  # 先构建并安装 bigwork_starter
+          cd ../bigwork_meta && mvn clean package  # 再构建 bigwork_meta
+          cd ../bigwork_apitest && mvn clean package  # 最后构建 bigwork_apitest
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
