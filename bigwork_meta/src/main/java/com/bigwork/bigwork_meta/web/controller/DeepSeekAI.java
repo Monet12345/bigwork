@@ -3,6 +3,7 @@ package com.bigwork.bigwork_meta.web.controller;
 import com.bigwork.bigwork_meta.service.DeepSeekAIService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
 import model.Result;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ public class DeepSeekAI {
     private DeepSeekAIService deepSeekAIService;
     @GetMapping("/ask")
     @ApiOperation(value = "AI文字问答")
-    public Result<String>  ask(@RequestParam String question,String workspaceId) throws IOException, InterruptedException {
+    public Result<String> ask(@RequestParam String question, String workspaceId) throws IOException, InterruptedException {
         return Result.buildSuccess(deepSeekAIService.ask(question,workspaceId));
     }
 
