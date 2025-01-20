@@ -3,10 +3,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- 项目基本信息 -->
-    <groupId>com.starter</groupId> <!-- 你的项目组ID -->
-    <artifactId>bigwork-starter-boot</artifactId> <!-- 你的项目ID -->
-    <version>1.0.0-SNAPSHOT</version> <!-- 项目版本号 -->
-    <packaging>pom</packaging> <!-- 打包方式，可以是 jar、war 等 -->
+    <groupId>com.starter</groupId>
+    <artifactId>bigwork-starter-boot</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
     <modules>
         <module>bigwork_starter</module>
         <module>bigwork_meta</module>
@@ -20,15 +20,14 @@
         <version>2.7.3</version>
     </parent>
 
+    <!-- 项目属性 -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
-        <java.version>8</java.version>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <java.version>8</java.version> <!-- 统一使用 JDK 8 -->
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
     </properties>
-
-
 
     <!-- 依赖管理 -->
     <dependencies>
@@ -43,34 +42,20 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
-        <!-- 其他依赖 -->
-        <!-- 例如：数据库驱动、工具库等 -->
-        <!--
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.26</version>
-        </dependency>
-        -->
     </dependencies>
 
     <!-- 构建配置 -->
     <build>
         <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.11.0</version>
-                    <configuration>
-                        <source>1.8</source>
-                        <target>1.8</target>
-                    </configuration>
-                </plugin>
-
-
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>${java.version}</source> <!-- 使用属性中的 JDK 版本 -->
+                    <target>${java.version}</target> <!-- 使用属性中的 JDK 版本 -->
+                </configuration>
+            </plugin>
         </plugins>
     </build>
-
-
 </project>
