@@ -68,5 +68,6 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}  # 服务器密码
           script: |
             cd bigwork  # 进入项目目录
+            cd bigwork
             docker-compose down  # 停止当前运行的容器
             docker-compose up -d  # 启动新的容器
