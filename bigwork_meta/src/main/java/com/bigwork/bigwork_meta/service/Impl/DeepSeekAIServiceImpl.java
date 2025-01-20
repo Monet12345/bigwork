@@ -13,8 +13,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import util.JsonSerializer;
+
 import com.fasterxml.jackson.core.type.TypeReference;
+import util.JsonSerializer;
 
 import javax.annotation.Resource;
 import java.io.IOException;
