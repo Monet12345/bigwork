@@ -12,6 +12,7 @@
         <module>bigwork_meta</module>
         <module>bigwork_apitest</module>
     </modules>
+
     <!-- 父项目 -->
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -19,13 +20,15 @@
         <version>2.7.3</version>
     </parent>
 
-    <!-- 项目属性 -->
     <properties>
-        <java.version>11</java.version> <!-- Java 版本 -->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> <!-- 编码 -->
-        <maven.compiler.source>${java.version}</maven.compiler.source>
-        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+        <java.version>11</java.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
     </properties>
+
+
 
     <!-- 依赖管理 -->
     <dependencies>
