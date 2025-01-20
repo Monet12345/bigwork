@@ -134,5 +134,17 @@
         </dependency>
     </dependencies>
 
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>${java.version}</source> <!-- 使用属性中的 JDK 版本 -->
+                    <target>${java.version}</target> <!-- 使用属性中的 JDK 版本 -->
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
