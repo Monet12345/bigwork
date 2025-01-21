@@ -25,7 +25,7 @@ CREATE TABLE deepseek_db (
                              message TEXT NOT NULL COMMENT '消息内容',               -- 消息内容，文本类型
                              gmt_create DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',  -- 创建时间，默认当前时间
                              gmt_update DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'  -- 更新时间，默认当前时间，更新时自动刷新
-)
+);
 
 CREATE TABLE user_chat_db (
                               id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '自增主键',
