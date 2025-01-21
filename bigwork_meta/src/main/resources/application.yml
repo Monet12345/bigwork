@@ -15,7 +15,7 @@ spring:
       matching-strategy: ant_path_matcher
   redis:
     host: localhost
-    port: 6380  # 默认端口
+    port: 6379  # 默认端口
 swagger:
   enable: true
 mybatis:

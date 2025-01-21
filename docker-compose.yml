@@ -5,8 +5,8 @@ services:
     image: redis:latest
     container_name: redis
     ports:
-      - "6380:6380"
-    command: redis-server --port 6380  # 让 Redis 监听 6380 端口
+      - "6379:6379"
+
     volumes:
       - redis_data:/data  # 持久化 Redis 数据
     networks:
@@ -22,7 +22,7 @@ services:
       - "8084:8084"
     environment:
       SPRING_REDIS_HOST: redis
-      SPRING_REDIS_PORT: "6380"
+      SPRING_REDIS_PORT: "6379"
     depends_on:
       - redis
     networks:
@@ -37,7 +37,7 @@ services:
       - "8083:8083"
     environment:
       SPRING_REDIS_HOST: redis
-      SPRING_REDIS_PORT: "6380"
+      SPRING_REDIS_PORT: "6379"
     depends_on:
       - redis
     networks:
