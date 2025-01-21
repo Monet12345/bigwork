@@ -9,6 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 @MapperScan("com.bigwork.bigwork_meta.dal.mapper")
 public class BigworkMetaApplication {
 
+
     public static void main(String[] args) {
         SpringApplication.run(BigworkMetaApplication.class, args);
     }
