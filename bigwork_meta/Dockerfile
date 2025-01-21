@@ -1,5 +1,5 @@
 # 使用官方 Java 镜像
-FROM openjdk:8-jdk-alpine
+FROM openjdk:17-jdk-alpine
 
 # 设置工作目录
 WORKDIR /app
