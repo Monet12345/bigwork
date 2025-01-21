@@ -6,6 +6,7 @@ services:
     container_name: redis
     ports:
       - "6380:6380"
+    command: redis-server --port 6380  # 让 Redis 监听 6380 端口
     volumes:
       - redis_data:/data  # 持久化 Redis 数据
     networks:
