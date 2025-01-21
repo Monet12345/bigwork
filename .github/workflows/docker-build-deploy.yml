@@ -72,8 +72,8 @@ jobs:
             cd bigwork  # 进入项目目录
             cd bigwork
             git fetch origin  # 从远程仓库获取最新代码
-            git checkout ${{ github.ref_name }}  # 切换到指定分支（例如 iteration/your-branch）
-            git pull origin  ${{ github.ref_name }}  # 拉取最新代码
+            git checkout iteration/6  # 切换到指定分支（例如 iteration/your-branch）
+            git pull origin iteration/6  # 拉取最新代码
             docker-compose down --remove-orphans  # 停止并删除容器
             docker-compose pull  # 拉取最新镜像
             docker-compose up -d  # 启动新的容器
