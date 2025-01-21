@@ -1,15 +1,6 @@
 version: '3.8'
 
 services:
-  redis:
-    image: redis:latest
-    container_name: redis
-    ports:
-      - "6380:6379"  # 将宿主机的 6380 端口映射到容器的 6379 端口
-    volumes:
-      - redis_data:/data  # 持久化 Redis 数据
-    networks:
-      - app-network
 
   app1:
     build:
@@ -20,7 +11,7 @@ services:
       - "8082:8082"
       - "8084:8084"
     environment:
-      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_HOST: 62.234.221.226
       SPRING_REDIS_PORT: "6379"  # 连接到 Redis 容器的 6379 端口
     depends_on:
       - redis
@@ -35,15 +26,13 @@ services:
     ports:
       - "8083:8083"
     environment:
-      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_HOST: 62.234.221.226
       SPRING_REDIS_PORT: "6379"  # 连接到 Redis 容器的 6379 端口
     depends_on:
       - redis
     networks:
       - app-network
 
-volumes:
-  redis_data:
 
 networks:
   app-network:
