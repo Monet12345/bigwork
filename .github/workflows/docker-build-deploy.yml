@@ -76,12 +76,12 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}  # 服务器用户名
           password: ${{ secrets.SERVER_PASSWORD }}  # 服务器密码
           script: |
-            cd bigwork  # 进入项目目录
-            cd bigwork
+            cd bigwork/bigwork  # 进入项目目录
             git fetch origin  # 从远程仓库获取最新代码
             git checkout ${{ steps.extract-branch.outputs.branch_name }}  # 动态切换到当前分支
             git pull origin ${{ steps.extract-branch.outputs.branch_name }}  # 动态拉取当前分支的最新代码
             docker-compose down --remove-orphans  # 停止并删除容器
             docker-compose pull  # 拉取最新镜像
+            docker-compose build
             docker-compose up -d  # 启动新的容器
             docker-compose logs -f  # 查看日志
