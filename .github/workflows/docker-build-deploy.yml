@@ -12,6 +12,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2  # 拉取代码
 
+      - name: Display commit info
+        run: |
+          echo "Commit SHA: ${{ github.sha }}"
+          echo "Commit message: ${{ github.event.head_commit.message }}"
+          echo "Committer: ${{ github.event.head_commit.author.name }}"
+
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
@@ -65,7 +71,6 @@ jobs:
         run: |
           # 从 GITHUB_REF 中提取分支名称
           BRANCH_NAME=$(echo $GITHUB_REF | sed 's/refs\/heads\///')
-          echo $GITHUB_REF
           echo "Extracted branch name: $BRANCH_NAME"
           echo "::set-output name=branch_name::$BRANCH_NAME"
 
