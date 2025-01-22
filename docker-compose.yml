@@ -27,9 +27,7 @@ services:
 #      - app-network
 
   app1:
-    build:
-      context: ./bigwork_meta
-      dockerfile: Dockerfile
+    image: monet12345/bigwork_meta:meta
     container_name: bigwork_meta_app
     ports:
       - "8082:8082"
@@ -47,9 +45,7 @@ services:
       - app-network
 
   app2:
-    build:
-      context: ./bigwork_apitest
-      dockerfile: Dockerfile
+    image: monet12345/bigwork_apitest:apitest
     container_name: bigwork_apitest_app
     ports:
       - "8083:8083"
