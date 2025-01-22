@@ -87,13 +87,14 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}  # 服务器用户名
           password: ${{ secrets.SERVER_PASSWORD }}  # 服务器密码
           script: |
+            export SERVER_HOST=${{ secrets.SERVER_HOST }}
+            
             export MYSQL_USER=${{ secrets.MYSQL_USER }}
             export MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}
             export MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}
             export MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_PASSWORD }}
             
             cd ~/bigwork/bigwork
-            git fetch
-            git reset --hard ${{ github.sha }}
+            git fetch && git reset --hard ${{ github.sha }}
             docker-compose down --remove-orphans
             docker-compose up -d

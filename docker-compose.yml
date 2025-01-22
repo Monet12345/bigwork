@@ -42,7 +42,7 @@ services:
     environment:
       SPRING_REDIS_HOST: redis
       SPRING_REDIS_PORT: "6379"
-      SPRING_DATASOURCE_URL:            jdbc:mysql://${SERVER_HOSE}:3307/${MYSQL_DATABASE}      # 使用 MySQL 服务
+      SPRING_DATASOURCE_URL:            jdbc:mysql://${SERVER_HOST}:3307/${MYSQL_DATABASE}      # 使用 MySQL 服务
       SPRING_DATASOURCE_USERNAME:       ${MYSQL_USER}                                           # MySQL 用户名
       SPRING_DATASOURCE_PASSWORD:       ${MYSQL_PASSWORD}                                       # MySQL 密码
     depends_on:
@@ -59,7 +59,7 @@ services:
     environment:
       SPRING_REDIS_HOST: redis
       SPRING_REDIS_PORT: "6379"
-      SPRING_DATASOURCE_URL:        jdbc:mysql://${SERVER_HOSE}:3307/${MYSQL_DATABASE}      # 使用 MySQL 服务
+      SPRING_DATASOURCE_URL:        jdbc:mysql://${SERVER_HOST}:3307/${MYSQL_DATABASE}      # 使用 MySQL 服务
       SPRING_DATASOURCE_USERNAME:   ${MYSQL_USER}                                           # MySQL 用户名
       SPRING_DATASOURCE_PASSWORD:   ${MYSQL_PASSWORD}                                       # MySQL 密码
     depends_on:
