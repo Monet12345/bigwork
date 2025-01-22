@@ -9,6 +9,7 @@ name: Docker Build and Deploy
 # MYSQL_DATABASE        - mysql的数据库
 # MYSQL_USER            - mysql的用户名
 # MYSQL_PASSWORD        - mysql的密码
+# MYSQL_HOST            - mysql的ip或者域名
 
 on:
   push:
@@ -89,7 +90,7 @@ jobs:
           script: |
             set -e
             
-            export SERVER_HOST=${{ secrets.SERVER_HOST }}
+            export MYSQL_HOST=${{ secrets.MYSQL_HOST }}
             
             export MYSQL_USER=${{ secrets.MYSQL_USER }}
             export MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}
