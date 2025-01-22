@@ -70,6 +70,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2  # 拉取代码
 
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: Sync files to server
         run: |
           rsync -avz --delete . ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_PASSWORD }}:~/bigwork/bigwork
