@@ -70,19 +70,26 @@ jobs:
 
 
       - name: Deploy to server
-        uses: appleboy/ssh-action@master  # 使用 SSH 连接到服务器
+        uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.SERVER_HOST }}  # 服务器 IP 或域名
-          username: ${{ secrets.SERVER_USERNAME }}  # 服务器用户名
-          password: ${{ secrets.SERVER_PASSWORD }}  # 服务器密码
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_PASSWORD }}
           script: |
-            cd bigwork/bigwork  # 进入项目目录
-            git fetch origin  # 从远程仓库获取最新代码
-            git reset --hard
-            git checkout ${{ steps.extract-branch.outputs.branch_name }}  # 动态切换到当前分支
-            git pull origin ${{ steps.extract-branch.outputs.branch_name }}  # 动态拉取当前分支的最新代码
-            docker-compose down --remove-orphans  # 停止并删除容器
-            docker-compose pull  # 拉取最新镜像
+            cd bigwork/bigwork
+            echo "Current directory: $(pwd)"
+            echo "Checking out branch: ${{ steps.extract-branch.outputs.branch_name }}"
+            git fetch origin
+            git reset --hard  # 强制清除本地更改
+            git checkout ${{ steps.extract-branch.outputs.branch_name }}
+            git pull origin ${{ steps.extract-branch.outputs.branch_name }}
+            echo "Stopping and removing existing containers..."
+            docker-compose down --remove-orphans  # 删除所有容器
+            echo "Pulling latest images..."
+            docker-compose pull
+            echo "Building Docker images..."
             docker-compose build
-            docker-compose up -d  # 启动新的容器
-            docker-compose logs -f  # 查看日志
+            echo "Starting containers..."
+            docker-compose up -d
+            echo "Viewing logs..."
+            docker-compose logs -f
