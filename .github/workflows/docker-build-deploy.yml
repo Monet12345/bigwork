@@ -70,6 +70,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2  # 拉取代码
 
+      - name: Sync files to server
+        run: |
+          rsync -avz --delete . ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_PASSWORD }}:~/bigwork/bigwork
+
       - name: Deploy to server
         uses: appleboy/ssh-action@master  # 使用 SSH 连接到服务器
         with:
@@ -77,8 +81,5 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}  # 服务器用户名
           password: ${{ secrets.SERVER_PASSWORD }}  # 服务器密码
           script: |
-            cd bigwork/bigwork
-            git fetch origin
-            git reset --hard ${{github.sha}}
             docker-compose down --remove-orphans
             docker-compose up -d
