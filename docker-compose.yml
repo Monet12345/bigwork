@@ -35,7 +35,7 @@ services:
     environment:
       SPRING_REDIS_HOST: redis
       SPRING_REDIS_PORT: "6379"
-      SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/bigwork_db  # 使用 MySQL 服务
+      SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/big_work_db  # 使用 MySQL 服务
       SPRING_DATASOURCE_USERNAME: fangchen                  # MySQL 用户名
       SPRING_DATASOURCE_PASSWORD: chen160213497                  # MySQL 密码
     depends_on:
@@ -52,7 +52,7 @@ services:
     environment:
       SPRING_REDIS_HOST: redis
       SPRING_REDIS_PORT: "6379"
-      SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/bigwork_db  # 使用 MySQL 服务
+      SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/big_work_db  # 使用 MySQL 服务
       SPRING_DATASOURCE_USERNAME: fangchen                  # MySQL 用户名
       SPRING_DATASOURCE_PASSWORD: chen160213497                  # MySQL 密码
     depends_on:
