@@ -21,7 +21,7 @@ services:
     image: mysql:8.0  # 使用 MySQL 8.0 镜像
     container_name: mysql
 #    ports:
-#      - "3306:3306"  # 将容器的 3306 端口映射到主机的 3306 端口
+#      - "3307:3307"  # 将容器的 3306 端口映射到主机的 3306 端口
     environment:
       MYSQL_ROOT_PASSWORD:          ${MYSQL_ROOT_PASSWORD}      # 设置 MySQL root 用户的密码
       MYSQL_DATABASE:               ${MYSQL_DATABASE}           # 创建一个默认数据库
@@ -29,6 +29,7 @@ services:
       MYSQL_PASSWORD:               ${MYSQL_PASSWORD}           # 设置新用户的密码
     volumes:
       - mysql_data:/var/lib/mysql  # 持久化 MySQL 数据
+      - ./my.cnf:/etc/mysql/my.cnf  # 将自定义配置文件挂载到 MySQL 容器
     networks:
       - app-network
 
@@ -41,7 +42,7 @@ services:
     environment:
       SPRING_REDIS_HOST: redis
       SPRING_REDIS_PORT: "6379"
-      SPRING_DATASOURCE_URL:            jdbc:mysql://mysql:3306/${MYSQL_DATABASE}               # 使用 MySQL 服务
+      SPRING_DATASOURCE_URL:            jdbc:mysql://mysql:3307/${MYSQL_DATABASE}               # 使用 MySQL 服务
       SPRING_DATASOURCE_USERNAME:       ${MYSQL_USER}                                           # MySQL 用户名
       SPRING_DATASOURCE_PASSWORD:       ${MYSQL_PASSWORD}                                       # MySQL 密码
     depends_on:
@@ -58,7 +59,7 @@ services:
     environment:
       SPRING_REDIS_HOST: redis
       SPRING_REDIS_PORT: "6379"
-      SPRING_DATASOURCE_URL:        jdbc:mysql://mysql:3306/${MYSQL_DATABASE}               # 使用 MySQL 服务
+      SPRING_DATASOURCE_URL:        jdbc:mysql://mysql:3307/${MYSQL_DATABASE}               # 使用 MySQL 服务
       SPRING_DATASOURCE_USERNAME:   ${MYSQL_USER}                                           # MySQL 用户名
       SPRING_DATASOURCE_PASSWORD:   ${MYSQL_PASSWORD}                                       # MySQL 密码
     depends_on:
