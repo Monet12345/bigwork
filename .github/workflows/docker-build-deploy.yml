@@ -78,6 +78,7 @@ jobs:
           script: |
             cd bigwork/bigwork  # 进入项目目录
             git fetch origin  # 从远程仓库获取最新代码
+            git reset --hard
             git checkout ${{ steps.extract-branch.outputs.branch_name }}  # 动态切换到当前分支
             git pull origin ${{ steps.extract-branch.outputs.branch_name }}  # 动态拉取当前分支的最新代码
             docker-compose down --remove-orphans  # 停止并删除容器
