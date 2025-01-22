@@ -35,7 +35,7 @@ jobs:
       - name: Reset to newest commit
         run: |
           git fetch
-          git reset --hard origin/iteration/${{ github.ref_name }}  # 切换到当前分支的最新提交
+          git reset --hard origin/${{ github.ref_name }}  # 切换到当前分支的最新提交
           git status
 
       - name: Build sources
