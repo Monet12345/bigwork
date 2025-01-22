@@ -87,6 +87,8 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}  # 服务器用户名
           password: ${{ secrets.SERVER_PASSWORD }}  # 服务器密码
           script: |
+            set -e
+            
             export SERVER_HOST=${{ secrets.SERVER_HOST }}
             
             export MYSQL_USER=${{ secrets.MYSQL_USER }}
