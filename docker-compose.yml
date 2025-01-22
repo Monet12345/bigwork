@@ -11,20 +11,20 @@ services:
     networks:
       - app-network
 
-  mysql:
-    image: mysql:8.0  # 使用 MySQL 8.0 镜像
-    container_name: mysql
-    ports:
-      - "3307:3306"  # 将容器的 3306 端口映射到主机的 3306 端口
-    environment:
-      MYSQL_ROOT_PASSWORD: chen160213497  # 设置 MySQL root 用户的密码
-      MYSQL_DATABASE: big_work_db         # 创建一个默认数据库
-      MYSQL_USER: fangchen           # 创建一个新用户
-      MYSQL_PASSWORD: chen160213497       # 设置新用户的密码
-    volumes:
-      - mysql_data:/var/lib/mysql  # 持久化 MySQL 数据
-    networks:
-      - app-network
+#  mysql:
+#    image: mysql:8.0  # 使用 MySQL 8.0 镜像
+#    container_name: mysql
+#    ports:
+#      - "3307:3306"  # 将容器的 3306 端口映射到主机的 3306 端口
+#    environment:
+#      MYSQL_ROOT_PASSWORD: chen160213497  # 设置 MySQL root 用户的密码
+#      MYSQL_DATABASE: big_work_db         # 创建一个默认数据库
+#      MYSQL_USER: fangchen           # 创建一个新用户
+#      MYSQL_PASSWORD: chen160213497       # 设置新用户的密码
+#    volumes:
+#      - mysql_data:/var/lib/mysql  # 持久化 MySQL 数据
+#    networks:
+#      - app-network
 
   app1:
     build:
@@ -37,12 +37,12 @@ services:
     environment:
       SPRING_REDIS_HOST: redis
       SPRING_REDIS_PORT: "6379"
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/bigwork_db  # 使用 MySQL 服务
+      SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/bigwork_db  # 使用 MySQL 服务
       SPRING_DATASOURCE_USERNAME: fangchen                  # MySQL 用户名
       SPRING_DATASOURCE_PASSWORD: chen160213497                  # MySQL 密码
     depends_on:
       - redis
-      - mysql
+#      - mysql
     networks:
       - app-network
 
@@ -56,12 +56,12 @@ services:
     environment:
       SPRING_REDIS_HOST: redis
       SPRING_REDIS_PORT: "6379"
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/bigwork_db  # 使用 MySQL 服务
+      SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/bigwork_db  # 使用 MySQL 服务
       SPRING_DATASOURCE_USERNAME: fangchen                  # MySQL 用户名
       SPRING_DATASOURCE_PASSWORD: chen160213497                  # MySQL 密码
     depends_on:
       - redis
-      - mysql
+#      - mysql
     networks:
       - app-network
 
