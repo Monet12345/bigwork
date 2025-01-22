@@ -68,6 +68,7 @@ jobs:
           echo "Extracted branch name: $BRANCH_NAME"
           echo "::set-output name=branch_name::$BRANCH_NAME"
 
+
       - name: Deploy to server
         uses: appleboy/ssh-action@master  # 使用 SSH 连接到服务器
         with:
