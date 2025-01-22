@@ -32,12 +32,15 @@ jobs:
           restore-keys: |
             maven-Linux-  # 通用缓存键
 
-      - name: Build with Maven
+      - name: reset to newest commit
         run: |
-          ls -R  # 打印目录结构，检查路径
-          cd bigwork_starter && mvn clean install -e -X  # 启用详细日志
-          cd ../bigwork_meta && mvn clean package -e -X
-          cd ../bigwork_apitest && mvn clean package -e -X
+          git fetch
+          git reset --hard ${{github.sha}}
+          git status
+
+      - name: Build sources
+        run: |
+          mvn clean install -e
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
@@ -66,15 +69,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2  # 拉取代码
 
-      - name: Extract branch name
-        id: extract-branch
-        run: |
-          # 从 GITHUB_REF 中提取分支名称
-          BRANCH_NAME=$(echo $GITHUB_REF | sed 's/refs\/heads\///')
-          echo "Extracted branch name: $BRANCH_NAME"
-          echo "::set-output name=branch_name::$BRANCH_NAME"
-
-
       - name: Deploy to server
         uses: appleboy/ssh-action@master  # 使用 SSH 连接到服务器
         with:
@@ -82,13 +76,10 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}  # 服务器用户名
           password: ${{ secrets.SERVER_PASSWORD }}  # 服务器密码
           script: |
-            cd bigwork/bigwork  # 进入项目目录
-            git fetch origin  # 从远程仓库获取最新代码
-            git reset --hard 
-            git checkout ${{ steps.extract-branch.outputs.branch_name }}  # 动态切换到当前分支
-            git pull origin ${{ steps.extract-branch.outputs.branch_name }}  # 动态拉取当前分支的最新代码
-            docker-compose down --remove-orphans  # 停止并删除容器
-            docker-compose pull  # 拉取最新镜像
+            cd bigwork/bigwork
+            git fetch origin
+            git reset --hard ${{github.sha}}
+            docker-compose down --remove-orphans
             docker-compose build
-            docker-compose up -d  # 启动新的容器
+            docker-compose up -d
             docker-compose logs -f  # 查看日志
