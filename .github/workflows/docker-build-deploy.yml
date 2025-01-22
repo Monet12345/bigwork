@@ -82,6 +82,7 @@ jobs:
             git checkout ${{ steps.extract-branch.outputs.branch_name }}  # 动态切换到当前分支
             git pull origin ${{ steps.extract-branch.outputs.branch_name }}  # 动态拉取当前分支的最新代码
             docker-compose down --remove-orphans  # 停止并删除容器
+            docker-compose build --no-cache
             docker-compose pull  # 拉取最新镜像
             docker-compose up -d  # 启动新的容器
             docker-compose logs -f  # 查看日志
