@@ -1,5 +1,15 @@
 name: Docker Build and Deploy
 
+# 需要的secrets:
+# DOCKER_HUB_USERNAME   - docker hub的用户名
+# DOCKER_HUB_PASSWORD   - docker hub的密码
+# SERVER_HOST           - 服务器域名或ip
+# SERVER_USERNAME       - 服务器用户名
+# SERVER_PASSWORD       - 服务器密码
+# MYSQL_DATABASE        - mysql的数据库
+# MYSQL_USER            - mysql的用户名
+# MYSQL_PASSWORD        - mysql的密码
+
 on:
   push:
     branches:
@@ -77,6 +87,11 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}  # 服务器用户名
           password: ${{ secrets.SERVER_PASSWORD }}  # 服务器密码
           script: |
+            export MYSQL_USER=${{ secrets.MYSQL_USER }}
+            export MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}
+            export MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}
+            export MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_PASSWORD }}
+            
             cd ~/bigwork/bigwork
             git fetch
             git reset --hard ${{ github.sha }}
