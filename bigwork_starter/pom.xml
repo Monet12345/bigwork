@@ -9,7 +9,7 @@
     <description>bigwork_starter</description>
 
     <properties>
-        <java.version>8</java.version>
+        <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-boot.version>2.7.3</spring-boot.version>
@@ -145,6 +145,7 @@
                     <target>${java.version}</target> <!-- 使用属性中的 JDK 版本 -->
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 </project>

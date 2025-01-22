@@ -60,8 +60,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2  # 拉取代码
 
-
-
+      - name: Extract branch name
+        id: extract-branch
+        run: |
+          # 从 GITHUB_REF 中提取分支名称
+          BRANCH_NAME=$(echo $GITHUB_REF | sed 's/refs\/heads\///')
+          echo "Extracted branch name: $BRANCH_NAME"
+          echo "::set-output name=branch_name::$BRANCH_NAME"
 
       - name: Deploy to server
         uses: appleboy/ssh-action@master  # 使用 SSH 连接到服务器
@@ -71,10 +76,9 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}  # 服务器密码
           script: |
             cd bigwork  # 进入项目目录
-            cd bigwork
             git fetch origin  # 从远程仓库获取最新代码
-            git checkout iteration/6  # 切换到指定分支（例如 iteration/your-branch）
-            git pull origin iteration/6  # 拉取最新代码
+            git checkout ${{ steps.extract-branch.outputs.branch_name }}  # 动态切换到当前分支
+            git pull origin ${{ steps.extract-branch.outputs.branch_name }}  # 动态拉取当前分支的最新代码
             docker-compose down --remove-orphans  # 停止并删除容器
             docker-compose pull  # 拉取最新镜像
             docker-compose up -d  # 启动新的容器
