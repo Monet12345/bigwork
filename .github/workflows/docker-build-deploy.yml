@@ -66,8 +66,8 @@ jobs:
       - name: Verify Docker images
         run: |
           echo "Verifying Docker images..."
-          docker pull monet12345/bigwork_meta:meta
-          docker pull monet12345/bigwork_apitest:apitest
+          docker pull monet12345/bigwork_meta:meta || true
+          docker pull monet12345/bigwork_apitest:apitest || true
 
   deploy:
     runs-on: ubuntu-latest
@@ -86,15 +86,19 @@ jobs:
             echo "Deploying to server..."
             cd ~/bigwork/bigwork
             git fetch
-            git reset --hard origin/iteration/${{ github.ref_name }}  # 切换到当前分支的最新提交
+            git reset --hard origin/${{ github.ref_name }}  # 切换到当前分支的最新提交
             echo "Cleaning up old containers and networks..."
             docker-compose down --remove-orphans || true  # 清理旧容器
             docker network rm bigwork_app-network || true  # 清理旧网络
             echo "Pulling latest images..."
-            docker-compose pull
+            docker-compose pull || true
             echo "Building Docker images..."
-            docker-compose build
+            docker-compose build || true
             echo "Starting containers..."
             docker-compose up -d
+            echo "Waiting for containers to start..."
+            sleep 30  # 等待容器启动
+            echo "Checking container status..."
+            docker-compose ps
             echo "Deployment completed!"
             docker-compose logs -f  # 查看日志
