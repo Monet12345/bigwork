@@ -93,7 +93,7 @@ jobs:
             export MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}
             export MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}
             export MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_PASSWORD }}
-            
+            export MY_ENV_VARIABLE=prod
             cd ~/bigwork/bigwork
             git fetch && git reset --hard ${{ github.sha }}
             docker-compose down --remove-orphans
