@@ -1,0 +1,19 @@
+# 服务器配置
+server:
+  port: 8083  # 应用程序运行的端口号
+  servlet:
+    context-path: /apitest
+spring:
+  datasource:
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  config:
+    activate:
+      on-profile: prod
+swagger:
+  enable: true
+mybatis:
+  mapper-locations: classpath*:mapper/*.xml
+  type-aliases-package: com.bigwork.bigwork_apitest.model
