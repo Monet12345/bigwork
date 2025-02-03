@@ -7,6 +7,15 @@ version: '3.8'
 # MYSQL_PASSWORD        - mysql的密码
 
 services:
+  apache:
+    image: httpd:latest
+    ports:
+      - "8085:8085"
+    volumes:
+      - ./httpd.conf:/usr/local/apache2/conf/httpd.conf
+    networks:
+      - app-network
+
   redis:
     image: redis:latest
     container_name: redis
