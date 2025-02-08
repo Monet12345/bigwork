@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class UserToken {
-  String token;
-  String tokenName;
-  String expiresIn;//过期时间
-  String userId;
+  private String token;
+  private String tokenName;
+  private String expiresIn;//过期时间
+  private String userId;
 }

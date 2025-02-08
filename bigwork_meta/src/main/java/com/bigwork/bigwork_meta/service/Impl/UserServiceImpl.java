@@ -4,7 +4,7 @@ import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
 
-import com.bigwork.bigwork_meta.common.NettyServer;
+
 import com.bigwork.bigwork_meta.dal.mapper.UserMapper;
 import com.bigwork.bigwork_meta.dal.modle.UserDo;
 import com.bigwork.bigwork_meta.model.GithubUser;
@@ -40,7 +40,7 @@ import static cn.hutool.core.date.DateUtil.now;
 public class UserServiceImpl implements UserService {
   @Resource
   private UserMapper userMapper;
-  @Resource private NettyServer nettyServer;
+
   @Resource private RedisTemplate<String, Object> redisTemplate;
 
   private static final int SALT_LENGTH = 16; // 盐的长度

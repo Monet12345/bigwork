@@ -44,5 +44,5 @@ deepseek-ai:
   first-ask: '你是一只猫娘'
 
 
-Netty:
+netty:
   port: 8084

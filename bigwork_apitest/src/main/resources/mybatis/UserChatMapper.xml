@@ -25,8 +25,8 @@
         from user_chat_db
         where user_id = #{userId}
         and workspace_id = #{workspaceId}
-        order by unread desc
-        LIMIT #{offset},#{pageSize}
+        order by gmt_update desc
+        LIMIT #{realOffset},#{pageSize}
     </select>
 
 

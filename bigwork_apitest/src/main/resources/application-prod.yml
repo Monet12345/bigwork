@@ -17,3 +17,5 @@ swagger:
 mybatis:
   mapper-locations: classpath*:mapper/*.xml
   type-aliases-package: com.bigwork.bigwork_apitest.model
+netty:
+  port: 8084
