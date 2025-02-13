@@ -39,7 +39,15 @@
         )
     </insert>
 
-
+    <select id="getChatDetailByRealOffset" resultMap="resultMap">
+        select <include refid="columns"/>
+        from chat_detail_db
+        where user_id = #{userId}
+        and friend_id = #{friendId}
+        and workspace_id = #{workspaceId}
+        order by gmt_update desc
+        LIMIT #{realOffset},#{pageSize}
+    </select>
 
 
 </mapper>

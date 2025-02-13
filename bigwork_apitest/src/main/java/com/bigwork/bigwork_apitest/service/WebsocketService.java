@@ -6,5 +6,7 @@ public interface WebsocketService {
     String getMessage();
 
 
-    void updateChatDetail(String request, Channel channel);
+    void updateChatDetail(String request);
+
+    void setRole(String userId,Channel channel);
 }

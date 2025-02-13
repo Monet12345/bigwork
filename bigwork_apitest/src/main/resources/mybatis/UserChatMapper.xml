@@ -9,6 +9,7 @@
         workspace_id,
         friend_id,
         unread,
+        gmt_update,
         status
     </sql>
 
@@ -17,7 +18,9 @@
         <result property="friendId" column="friend_id"/>
         <result property="unread" column="unread"/>
         <result property="status" column="status"/>
+        <result property="gmtUpdate" column="gmt_update"/>
         <result property="workspaceId" column="workspace_id"/>
+
     </resultMap>
 
     <select id="getFriendList" resultMap="resultMap">
@@ -28,6 +31,23 @@
         order by gmt_update desc
         LIMIT #{realOffset},#{pageSize}
     </select>
+
+    <select id="getFriendListByUserIdAndFriendId" resultMap="resultMap">
+        select <include refid="columns"/>
+        from user_chat_db
+        where user_id = #{userId}
+        and friend_id = #{friendId}
+        and workspace_id = #{workspaceId}
+    </select>
+
+    <update id="updateFriendList">
+        update user_chat_db
+        set unread = #{unread}, gmt_update=#{gmtUpdate}
+        where user_id = #{userId}
+        and friend_id = #{friendId}
+        and workspace_id = #{workspaceId}
+    </update>
+
 
 
 </mapper>

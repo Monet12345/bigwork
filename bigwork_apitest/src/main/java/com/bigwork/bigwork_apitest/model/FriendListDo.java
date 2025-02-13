@@ -9,4 +9,5 @@ public class FriendListDo {
   private String friendId;
   private Long unread;
   private String status;
+  private String gmtUpdate;
 }

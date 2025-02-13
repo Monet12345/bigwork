@@ -43,9 +43,12 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<WebSocketFrame
       }
       switch (sendType) {
         case "updateChatDetail"://有用户发送了新消息，需要传入NewChatDetail类型
-          websocketService.updateChatDetail(request, ctx.channel());
-          break;
+          websocketService.updateChatDetail(request);
 
+        case "setRole":
+          websocketService.setRole(request, ctx.channel());
+          //刚连上以后发前端发个消息，只传当前连的这个人的userId，告诉后端这个客户端是谁的
+          break;
       }
 
 
@@ -67,8 +70,8 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<WebSocketFrame
   public void handlerAdded(ChannelHandlerContext ctx) {
     // 客户端连接时，保存 Channel
     String clientId = ctx.channel().id().asShortText(); // 使用 Channel ID 作为客户端标识
-    ClientMapSingleton.getInstance().addClient(clientId, ctx.channel());
     System.out.println("Client connected: " + clientId);
+    ctx.channel().writeAndFlush(new TextWebSocketFrame("连接成功,请在该连接发消息告诉后端这个客户端对应的userId"));
   }
 
   @Override

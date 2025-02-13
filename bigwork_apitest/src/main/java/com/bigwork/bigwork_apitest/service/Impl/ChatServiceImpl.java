@@ -2,10 +2,9 @@ package com.bigwork.bigwork_apitest.service.Impl;
 
 
 import cn.hutool.core.bean.BeanUtil;
+import com.bigwork.bigwork_apitest.dal.mapper.ChatDetailMapper;
 import com.bigwork.bigwork_apitest.dal.mapper.UserChatMapper;
-import com.bigwork.bigwork_apitest.model.FriendListDo;
-import com.bigwork.bigwork_apitest.model.FriendListReq;
-import com.bigwork.bigwork_apitest.model.FriendVo;
+import com.bigwork.bigwork_apitest.model.*;
 import com.bigwork.bigwork_apitest.service.ChatService;
 import lombok.extern.slf4j.Slf4j;
 import model.Page;
@@ -20,6 +19,8 @@ import java.util.List;
 public class ChatServiceImpl implements ChatService {
   @Resource
   private UserChatMapper userChatMapper;
+  @Resource
+  private ChatDetailMapper chatDetailMapper;
   @Override
   public Page<FriendVo> getFriendList(FriendListReq friendListReq) {
     List<FriendListDo> friendList = userChatMapper.getFriendList(friendListReq);
@@ -29,5 +30,11 @@ public class ChatServiceImpl implements ChatService {
       friendVos.add(friendVo);
     });
     return  new Page<>(friendListReq.getPageNo(), friendListReq.getPageSize(), (long) friendVos.size(), friendVos);
+  }
+
+  @Override
+  public List<ChatDetailDo> getChatDetail(ChatDetailReq chatDetailReq) {
+
+    return chatDetailMapper.getChatDetailByRealOffset(chatDetailReq);
   }
 }
