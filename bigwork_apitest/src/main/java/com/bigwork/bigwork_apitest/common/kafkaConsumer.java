@@ -25,6 +25,7 @@ public class kafkaConsumer {
     private void startConsuming(){
         consumer.subscribe(Collections.singletonList("chat-list-topic"));
         new Thread(() -> {
+
             while (true) {
                 ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
 
