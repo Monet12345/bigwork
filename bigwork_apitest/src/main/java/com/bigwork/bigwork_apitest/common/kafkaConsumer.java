@@ -17,7 +17,7 @@ import java.util.Collections;
 @Component
 public class kafkaConsumer {
     @Resource
-    private KafkaConsumer<String, String> consumer;
+    private KafkaConsumer<String, String>  consumer;
     @Resource
     private ReceiveChatMessage receiveChatMessage;
  
