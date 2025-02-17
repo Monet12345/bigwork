@@ -33,6 +33,8 @@ public class KafkaConfig {
         props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         props.put("security.protocol", "PLAINTEXT");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "chat_message_consumer");  // 设置 group.id
+
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest"); // 从最早的消息开始消费
         return new KafkaConsumer<>(props);
     }

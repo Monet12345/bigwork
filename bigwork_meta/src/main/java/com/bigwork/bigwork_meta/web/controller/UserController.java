@@ -2,10 +2,11 @@ package com.bigwork.bigwork_meta.web.controller;
 
 
 
+import api.NettyServiceFacade;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 
-import com.bigwork.bigwork_meta.common.NettyServer;
+
 import com.bigwork.bigwork_meta.model.UserToken;
 import com.bigwork.bigwork_meta.service.UserService;
 import com.bigwork.bigwork_meta.model.CaptchaVo;
@@ -14,6 +15,7 @@ import com.bigwork.bigwork_meta.model.LoginReq;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.val;
 import model.Result;
 import org.springframework.web.bind.annotation.*;
 import util.BizException;
@@ -29,7 +31,7 @@ import java.io.IOException;
 
 public class UserController {
   @Resource private UserService userService;
-  @Resource private NettyServer nettyServer;
+  @Resource private NettyServiceFacade nettyServiceFacade;
   @PostMapping("/login")
   @ApiOperation(value = "登录")
   public Result<SaTokenInfo> login(@RequestBody LoginReq req) {
@@ -55,7 +57,10 @@ public class UserController {
     if(StpUtil.isLogin()){
       StpUtil.logout();
       try {
-        nettyServer.stop();
+        Result<String> stop = nettyServiceFacade.stop();
+        if (!stop.isSuccess()) {
+          throw new BizException("websocket断开失败", new Exception(stop.getMessage()));
+        }
       }
       catch (Exception e){
         throw new BizException("websocket断开失败",e);
@@ -71,7 +76,10 @@ public class UserController {
   @ApiOperation(value = "使用github登录，请求这个接口会返回给前端一个url，前端需要请求这个url来获取用户信息")
   public Result<String> loginByGithub() {
     try{
-      nettyServer.start();
+      Result<String> start = nettyServiceFacade.start();
+      if (!start.isSuccess()) {
+        throw new BizException("websocket启动失败", new Exception(start.getMessage()));
+      }
     }
     catch (Exception e){
       throw new BizException("建立websocket连接失败",e);

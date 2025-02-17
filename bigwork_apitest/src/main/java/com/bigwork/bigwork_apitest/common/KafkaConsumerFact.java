@@ -5,6 +5,7 @@ import com.bigwork.bigwork_apitest.service.ReceiveChatMessage;
 import com.bigwork.bigwork_apitest.service.WebsocketService;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
+
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.springframework.stereotype.Component;
 
@@ -15,9 +16,9 @@ import java.time.Duration;
 import java.util.Collections;
 
 @Component
-public class kafkaConsumer {
+public class KafkaConsumerFact {
     @Resource
-    private KafkaConsumer<String, String>  consumer;
+    private KafkaConsumer<String, String> consumer;
     @Resource
     private ReceiveChatMessage receiveChatMessage;
  

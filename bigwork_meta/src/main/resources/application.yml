@@ -2,5 +2,6 @@ spring:
   profiles:
     active: ${MY_ENV_VARIABLE} # 默认使用本地配置
 
-    #本地执行命令：set MY_ENV_VARIABLE=local
+    #本地执行命令：$env:MY_ENV_VARIABLE = "local"
+    #
     #服务器执行: export MY_ENV_VARIABLE=prod

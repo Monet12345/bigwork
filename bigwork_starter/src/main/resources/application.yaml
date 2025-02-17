@@ -1,2 +1,10 @@
 
 
+bigwork:
+  meta:
+    server: http://localhost:8082
+    path: /meta
+  apitest:
+    server: http://localhost:8083
+    path: /apitest
+

@@ -5,9 +5,9 @@ server:
     context-path: /meta
 spring:
   datasource:
-    username: root
-    password: chen160213497
-    url: jdbc:mysql://localhost:3306/big_work_db?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL}
     driver-class-name: com.mysql.cj.jdbc.Driver
     # sa-token配置
   config:
