@@ -15,7 +15,7 @@ spring:
 swagger:
   enable: true
 mybatis:
-  mapper-locations: classpath*:mapper/*.xml
+  mapper-locations: classpath*:mybatis/*.xml
   type-aliases-package: com.bigwork.bigwork_apitest.model
 config:
   kafka:

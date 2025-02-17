@@ -10,6 +10,6 @@ import model.PageForm;
 public class FriendListReq extends PageForm {
     private String userId;
     private String workspaceId;
-    @ApiModelProperty(value = "当前已经展示的列表数量")
+    @ApiModelProperty(value = "当前已经展示的列表数量+1")
     private int realOffset;
 }

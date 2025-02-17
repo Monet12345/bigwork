@@ -17,8 +17,10 @@ public class FriendVo {
     }
   }
   private String userId;
+  private String userNickname;
   private String workspaceId;
   private String friendId;
+  private String friendNickname;
   private Long unread;
   private String status;
 

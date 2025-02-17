@@ -9,4 +9,5 @@ public interface UserMapper {
   int add(@Param("userDo")UserDo userDo);
   UserDo selectByUserName(@Param("userName") String userName,@Param("workspaceId") String workspaceId);
 
+  UserDo selectByUserId(@Param("userId") String userId,@Param("workspaceId") String workspaceId);
 }
