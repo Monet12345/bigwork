@@ -20,7 +20,7 @@ public class SwaggerConfig {
     return new Docket(DocumentationType.SWAGGER_2)
         .apiInfo(apiInfo())
         .select()
-        .apis(RequestHandlerSelectors.basePackage("com.bigwork.bigwork_meta.web.controller"))
+        .apis(RequestHandlerSelectors.basePackage("com.bigwork.bigwork_meta"))
         .paths(PathSelectors.any())
         .build();
   }

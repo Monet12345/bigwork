@@ -1,4 +1,4 @@
-package com.bigwork.bigwork_meta.web.controller;
+package com.bigwork.bigwork_meta.web;
 
 import com.bigwork.bigwork_meta.service.DeepSeekAIService;
 import io.swagger.annotations.Api;

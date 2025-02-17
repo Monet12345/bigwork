@@ -1,4 +1,4 @@
-package com.bigwork.bigwork_meta.web.controller;
+package com.bigwork.bigwork_meta.web;
 
 
 

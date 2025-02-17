@@ -10,7 +10,7 @@ import java.io.IOException;
 
 
 @FeignClient(
-    name = "idManagementFacade",
+    name = "deepSeekAIUtilFacade",
     url = "${bigwork.meta.server}",
     path = "${bigwork.meta.path}",
     primary = false)
