@@ -10,6 +10,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
+import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import lombok.extern.slf4j.Slf4j;
 import model.ClientMapSingleton;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +18,7 @@ import util.JsonSerializer;
 
 import javax.annotation.Resource;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class WebSocketHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
@@ -66,18 +68,29 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<WebSocketFrame
     ctx.close();
   }
 
+
   @Override
   public void handlerAdded(ChannelHandlerContext ctx) {
     // 客户端连接时，保存 Channel
     String clientId = ctx.channel().id().asShortText(); // 使用 Channel ID 作为客户端标识
     System.out.println("Client connected: " + clientId);
-    ctx.channel().writeAndFlush(new TextWebSocketFrame("连接成功,请在该连接发消息告诉后端这个客户端对应的userId"));
+
+    // 延迟一秒后发送消息
+    ctx.executor().schedule(() -> {
+      if (ctx.channel().isActive()) { // 确保 Channel 仍然活跃
+        ctx.channel().writeAndFlush(new TextWebSocketFrame("连接成功,请在该连接发消息告诉后端这个客户端对应的userId"));
+      }
+    }, 5, TimeUnit.SECONDS); // 延迟 1 秒
   }
+
+
+
 
   @Override
   public void handlerRemoved(ChannelHandlerContext ctx) {
     // 客户端断开连接时，移除 Channel
     String clientId = ctx.channel().id().asShortText();
+    ctx.channel().writeAndFlush(new TextWebSocketFrame("通道关闭"));
     ClientMapSingleton.getInstance().removeClient(clientId);
     System.out.println("Client disconnected: " + clientId);
   }
