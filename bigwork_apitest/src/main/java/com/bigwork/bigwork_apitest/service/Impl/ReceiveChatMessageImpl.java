@@ -1,9 +1,12 @@
 package com.bigwork.bigwork_apitest.service.Impl;
 
+import api.UserFacade;
+import cn.hutool.core.bean.BeanUtil;
 import com.bigwork.bigwork_apitest.dal.mapper.ChatDetailMapper;
 import com.bigwork.bigwork_apitest.dal.mapper.UserChatMapper;
 import com.bigwork.bigwork_apitest.model.ChatDetailDo;
 import com.bigwork.bigwork_apitest.model.FriendListDo;
+import com.bigwork.bigwork_apitest.model.FriendListVo;
 import com.bigwork.bigwork_apitest.model.NewChatDetail;
 import com.bigwork.bigwork_apitest.service.ReceiveChatMessage;
 import io.netty.channel.Channel;
@@ -11,6 +14,8 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import model.ClientMapSingleton;
+import model.User;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import util.JsonSerializer;
@@ -27,6 +32,9 @@ public class ReceiveChatMessageImpl implements ReceiveChatMessage {
     private ChatDetailMapper chatDetailMapper;
     @Resource
     private UserChatMapper userChatMapper;
+    @Resource
+    private UserFacade userFacade;
+
     @Override
     public void receiveChatDetailDo(String message) {
         ChatDetailDo chatDetailDo= JsonSerializer.deserializeFromJson(message,ChatDetailDo.class);
@@ -52,7 +60,13 @@ public class ReceiveChatMessageImpl implements ReceiveChatMessage {
         //要发给的人的客户端websocket通道
         Channel channel = ClientMapSingleton.getInstance().getClient(chatDetailDo.getUserId());
 //        String sendMessage = JsonSerializer.serializeToJson(chatDetailDo);
-        channel.writeAndFlush(new TextWebSocketFrame(JsonSerializer.serializeToJson(friendListDo)));
+        FriendListVo friendListVo = BeanUtil.copyProperties( friendListDo, FriendListVo.class);
+        friendListVo.setSendType("chatListNewMessage");
+        User user = userFacade.getUserById(chatDetailDo.getUserId(),chatDetailDo.getWorkspaceId()).getData();
+        User friend = userFacade.getUserById(chatDetailDo.getFriendId(),chatDetailDo.getWorkspaceId()).getData();
+        friendListVo.setUserNickname(user.getNickName());
+        friendListVo.setFriendNickname(friend.getNickName());
+        channel.writeAndFlush(new TextWebSocketFrame(JsonSerializer.serializeToJson(friendListVo)));
 //        channel.writeAndFlush(new TextWebSocketFrame(sendMessage));
         log.info("已通知客户端有新消息");
     }

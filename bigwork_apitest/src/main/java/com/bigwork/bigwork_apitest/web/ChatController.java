@@ -1,9 +1,6 @@
 package com.bigwork.bigwork_apitest.web;
 
-import com.bigwork.bigwork_apitest.model.ChatDetailDo;
-import com.bigwork.bigwork_apitest.model.ChatDetailReq;
-import com.bigwork.bigwork_apitest.model.FriendListReq;
-import com.bigwork.bigwork_apitest.model.FriendVo;
+import com.bigwork.bigwork_apitest.model.*;
 import com.bigwork.bigwork_apitest.service.ChatService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,7 +25,7 @@ public class ChatController {
 
   @PostMapping("/chatDetail")
   @ApiOperation(value = "聊天详情")
-  public Result<List<ChatDetailDo>> chatDetail(@RequestBody ChatDetailReq chatDetailReq) {
+  public Result<List<ChatDetailVo>> chatDetail(@RequestBody ChatDetailReq chatDetailReq) {
 
     return Result.buildSuccess(chatService.getChatDetail(chatDetailReq));
   }

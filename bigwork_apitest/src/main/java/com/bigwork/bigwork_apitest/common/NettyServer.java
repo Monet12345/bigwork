@@ -15,9 +15,12 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.annotation.Resource;
 
 @Component
 public class NettyServer {
+  @Resource
+  private WebSocketHandler webSocketHandler;
 
   @Value("${netty.port}")
   private int port;
@@ -40,7 +43,7 @@ public class NettyServer {
             ch.pipeline().addLast(new HttpServerCodec());
             ch.pipeline().addLast(new HttpObjectAggregator(65536));
             ch.pipeline().addLast(new WebSocketServerProtocolHandler("/ws"));
-            ch.pipeline().addLast(new WebSocketHandler());
+            ch.pipeline().addLast(webSocketHandler);
           }
         })
         .option(ChannelOption.SO_BACKLOG, 128)

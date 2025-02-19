@@ -48,3 +48,56 @@ CREATE TABLE chat_detail_db (
                                 type VARCHAR(255) NOT NULL COMMENT '消息类型',
                                 workspace_id VARCHAR(255) NOT NULL COMMENT '工作空间'
 ) COMMENT='用户聊天详情表';
+
+CREATE TABLE resource_data_read_db (
+                                       id INT AUTO_INCREMENT PRIMARY KEY COMMENT '自增主键，唯一标识每条记录',
+                                       resource_data_id VARCHAR(255) NOT NULL COMMENT '资源数据ID，关联其他表的唯一标识',
+                                       name VARCHAR(255) NOT NULL COMMENT '资源名称或表名',
+                                       data TEXT NOT NULL COMMENT '资源数据内容，存储具体的数据信息',
+                                       creat_user_id VARCHAR(255) NOT NULL COMMENT '创建人ID，标识创建该记录的用户',
+                                       update_user_id VARCHAR(255) NOT NULL COMMENT '最新修改人ID，标识最后修改该记录的用户',
+                                       gmt_creat DATETIME NOT NULL COMMENT '记录创建时间',
+                                       gmt_update DATETIME NOT NULL COMMENT '记录最后更新时间',
+                                       workspace_id VARCHAR(255) NOT NULL COMMENT '工作空间ID，标识该记录所属的工作空间',
+                                       iteration INT NOT NULL COMMENT '版本号，标识当前记录的版本',
+                                       exist INT NOT NULL DEFAULT 1 COMMENT '记录是否存在，1表示存在，0表示已删除',
+                                       INDEX idx_resource_data_id (resource_data_id) COMMENT '资源数据ID索引，用于加速查询',
+                                       INDEX idx_workspace_id (workspace_id) COMMENT '工作空间ID索引，用于加速查询'
+) COMMENT='资源数据读取表，存储资源的基本信息和数据内容';
+
+CREATE TABLE resource_data_write_db (
+                                        id INT AUTO_INCREMENT PRIMARY KEY COMMENT '自增主键，唯一标识每条记录',
+                                        resource_data_id VARCHAR(255) NOT NULL COMMENT '资源数据ID，关联其他表的唯一标识',
+                                        name VARCHAR(255) NOT NULL COMMENT '资源名称或表名',
+                                        data TEXT NOT NULL COMMENT '资源数据内容，存储具体的数据信息',
+                                        creat_user_id VARCHAR(255) NOT NULL COMMENT '创建人ID，标识创建该记录的用户',
+                                        update_user_id VARCHAR(255) NOT NULL COMMENT '最新修改人ID，标识最后修改该记录的用户',
+                                        gmt_creat DATETIME NOT NULL COMMENT '记录创建时间',
+                                        gmt_update DATETIME NOT NULL COMMENT '记录最后更新时间',
+                                        workspace_id VARCHAR(255) NOT NULL COMMENT '工作空间ID，标识该记录所属的工作空间',
+                                        iteration INT NOT NULL COMMENT '版本号，标识当前记录的版本',
+                                        exist INT NOT NULL DEFAULT 1 COMMENT '记录是否存在，1表示存在，0表示已删除',
+                                        INDEX idx_resource_data_id (resource_data_id) COMMENT '资源数据ID索引，用于加速查询',
+                                        INDEX idx_workspace_id (workspace_id) COMMENT '工作空间ID索引，用于加速查询'
+) COMMENT='资源数据写入表，是resource_data_read_db表的复制，用于写入操作';
+
+CREATE TABLE resource_iteration_data_read_db (
+                                                 id INT AUTO_INCREMENT PRIMARY KEY COMMENT '自增主键，唯一标识每条记录',
+                                                 resource_data_id VARCHAR(255) NOT NULL COMMENT '资源数据ID，外键关联resource_data_read_db表的resource_data_id字段',
+                                                 now_iteration INT NOT NULL COMMENT '当前展示的版本号',
+                                                 last_iteration INT NOT NULL COMMENT '最新的版本号',
+                                                 FOREIGN KEY (resource_data_id) REFERENCES resource_data_read_db(resource_data_id),
+                                                 INDEX idx_resource_data_id (resource_data_id) COMMENT '资源数据ID索引，用于加速查询'
+) COMMENT='资源版本数据读取表，存储资源的版本信息';
+
+CREATE TABLE resource_iteration_data_write_db (
+                                                  id INT AUTO_INCREMENT PRIMARY KEY COMMENT '自增主键，唯一标识每条记录',
+                                                  resource_data_id VARCHAR(255) NOT NULL COMMENT '资源数据ID，外键关联resource_data_write_db表的resource_data_id字段',
+                                                  now_iteration INT NOT NULL COMMENT '当前展示的版本号',
+                                                  last_iteration INT NOT NULL COMMENT '最新的版本号',
+                                                  FOREIGN KEY (resource_data_id) REFERENCES resource_data_write_db(resource_data_id) ,
+                                                  INDEX idx_resource_data_id (resource_data_id) COMMENT '资源数据ID索引，用于加速查询'
+) COMMENT='资源版本数据写入表，是resource_iteration_data_read_db表的复制，用于写入操作';
+
+
+

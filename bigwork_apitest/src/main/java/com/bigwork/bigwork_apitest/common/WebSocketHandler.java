@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
@@ -14,13 +15,16 @@ import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import lombok.extern.slf4j.Slf4j;
 import model.ClientMapSingleton;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.stereotype.Component;
 import util.JsonSerializer;
 
 import javax.annotation.Resource;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
+@Component
 @Slf4j
+@ChannelHandler.Sharable
 public class WebSocketHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
 
   @Resource
@@ -28,7 +32,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<WebSocketFrame
   // 保存所有连接的客户端 Channel的map名为ClientMapSingleton
 
   @Override
-  protected void channelRead0(ChannelHandlerContext ctx, WebSocketFrame frame) {
+  protected void channelRead0(ChannelHandlerContext ctx, WebSocketFrame frame) throws JsonProcessingException {
     if (frame instanceof TextWebSocketFrame) {
       String request = ((TextWebSocketFrame) frame).text();
 
@@ -47,8 +51,12 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<WebSocketFrame
         case "updateChatDetail"://有用户发送了新消息，需要传入NewChatDetail类型
           websocketService.updateChatDetail(request);
 
-        case "setRole":
-          websocketService.setRole(request, ctx.channel());
+        case "setRole":{
+          JsonNode jsonNode = objectMapper.readTree(request);
+          String userId = jsonNode.get("value").asText();
+          websocketService.setRole(userId, ctx.channel());
+        }
+
           //刚连上以后发前端发个消息，只传当前连的这个人的userId，告诉后端这个客户端是谁的
           break;
       }

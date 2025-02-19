@@ -7,6 +7,7 @@ import com.bigwork.bigwork_apitest.model.ChatDetailDo;
 import com.bigwork.bigwork_apitest.model.NewChatDetail;
 import com.bigwork.bigwork_apitest.service.WebsocketService;
 import io.netty.channel.Channel;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.extern.slf4j.Slf4j;
 
 import model.ClientMapSingleton;
@@ -61,6 +62,8 @@ public class WebsocketServiceImpl implements WebsocketService {
 
     @Override
     public void setRole(String userId, Channel channel) {
+
         ClientMapSingleton.getInstance().addClient(userId, channel);
+        channel.writeAndFlush(new TextWebSocketFrame("连接用户的userId记录成功"));
     }
 }

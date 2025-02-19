@@ -48,8 +48,16 @@ public class ChatServiceImpl implements ChatService {
   }
 
   @Override
-  public List<ChatDetailDo> getChatDetail(ChatDetailReq chatDetailReq) {
+  public List<ChatDetailVo> getChatDetail(ChatDetailReq chatDetailReq) {
 
-    return chatDetailMapper.getChatDetailByRealOffset(chatDetailReq);
-  }
+    List<ChatDetailDo> chatDetailDos = chatDetailMapper.getChatDetailByRealOffset(chatDetailReq);
+    List<ChatDetailVo> chatDetailVos = chatDetailDos.stream().map(chatDetailDo -> {
+      ChatDetailVo chatDetailVo = BeanUtil.copyProperties(chatDetailDo, ChatDetailVo.class);
+      User user = userFacade.getUserById(chatDetailDo.getUserId(), chatDetailDo.getWorkspaceId()).getData();
+      chatDetailVo.setContentUserNickname(user.getNickName());
+      return chatDetailVo;
+    }).toList();
+return chatDetailVos;
+}
+
 }
