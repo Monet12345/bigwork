@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.bigwork.bigwork_apitest.dal.mapper.ResourceDataReadMapper">
+<mapper namespace="com.bigwork.bigwork_apitest.dal.mapper.ResourceDataMapper">
 
 
 
@@ -30,12 +30,43 @@
         <result property="exist" column="exist"/>
     </resultMap>
 
+    <insert id="createList">
+        insert into ${resourceDataDb}(
+        <include refid="columns"/>
+        )
+        values(
+        #{resourceDateId},
+        #{name},
+        #{data},
+        #{createUserId},
+        #{updateUserId},
+        #{gmtCreate},
+        #{gmtUpdate},
+        #{workspaceId},
+        #{iteration},
+        #{exist}
+        )
+    </insert>
+
+    <update id="deleteList">
+        update ${resourceDataDb}
+        set exist = 0
+        where resource_data_id = #{resourceDateId}
+        and workspace_id = #{workspaceId}
+        and iteration in(
+            select last_iteration as iteration
+            from ${resourceIterationDb}
+            where resource_data_id = #{resourceDateId}
+            and workspace_id = #{workspaceId}
+            )
+    </update>
+
     <select id="getListInPage" resultMap="resultMap">
         SELECT <include refid="columns"/>
-        FROM resource_data_read_db
+        FROM ${resourceDataDb}
         WHERE (resource_data_id, iteration) IN (
         SELECT resource_data_id, last_iteration
-        FROM resource_iteration_data_read_db
+        FROM ${resourceIterationDb}
         WHERE workspace_id = #{workspaceId} <!-- 添加条件 -->
         )
         AND exist = 1
@@ -44,14 +75,16 @@
 
     <select id="getListInPageCount" resultType="long">
         SELECT count(*)
-        FROM resource_data_read_db
+        FROM ${resourceDataDb}
         WHERE (resource_data_id, iteration) IN (
         SELECT resource_data_id, last_iteration
-        FROM resource_iteration_data_read_db
+        FROM ${resourceIterationDb}
         WHERE workspace_id = #{workspaceId} <!-- 添加条件 -->
         )
         AND exist = 1
     </select>
+
+
 
 
 
