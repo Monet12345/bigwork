@@ -3,7 +3,7 @@ package com.bigwork.bigwork_apitest.model;
 import lombok.Data;
 
 @Data
-public class ResourceDo {
+public class ResourceVo {
     private String resourceDateId;
     private String name;
     private String data;
@@ -12,6 +12,4 @@ public class ResourceDo {
     private String gmtCreate;
     private String gmtUpdate;
     private String workspaceId;
-    private int iteration;
-    private String exist;
 }

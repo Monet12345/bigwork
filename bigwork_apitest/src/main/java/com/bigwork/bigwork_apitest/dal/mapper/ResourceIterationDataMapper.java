@@ -9,5 +9,12 @@ import org.mapstruct.Mapper;
 public interface ResourceIterationDataMapper {
     @ResourceDbInterface(type = "write")
     void createIteration(ResourceIterationDo resourceIterationDo);
+    @ResourceDbInterface(type = "write")
+    int update(ResourceIterationDo resourceIterationDo);
+
+    @ResourceDbInterface(type = "read")
+    ResourceIterationDo getIterationById(String resourceDateId);
+
+
 
 }

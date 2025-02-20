@@ -27,8 +27,18 @@
         #{lastIteration}
         )
     </insert>
+    <select id="getIterationById" resultMap="resultMap">
+        SELECT <include refid="columns"/>
+        FROM ${resourceIterationDb}
+        WHERE resource_data_id = #{resourceDateId}
+    </select>
 
-
+    <update id="update">
+        update ${resourceIterationDb}
+        set now_iteration = #{nowIteration},
+        last_iteration = #{lastIteration}
+        where resource_data_id = #{resourceDateId}
+    </update>
 
 
 

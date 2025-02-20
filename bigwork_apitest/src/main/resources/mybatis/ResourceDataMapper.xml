@@ -84,7 +84,60 @@
         AND exist = 1
     </select>
 
+    <select id="getListDetailById" resultMap="resultMap">
+        SELECT <include refid="columns"/>
+        FROM ${resourceDataDb}
+        WHERE (resource_data_id, iteration) IN (
+        SELECT resource_data_id, last_iteration
+        FROM ${resourceIterationDb}
+        WHERE workspace_id = #{workspaceId}
+        and resource_data_id=#{resourceDateId}
+        )
+        AND exist = 1
+    </select>
 
+    <select id="searchList" resultMap="resultMap">
+        SELECT <include refid="columns"/>
+        FROM ${resourceDataDb}
+        WHERE (resource_data_id, iteration) IN (
+        SELECT resource_data_id, last_iteration
+        FROM ${resourceIterationDb}
+        WHERE workspace_id = #{workspaceId} <!-- 添加条件 -->
+        )
+        AND exist = 1
+        AND name like concat('%',#{name},'%')
+        LIMIT #{offset},#{pageSize}
+    </select>
+
+    <select id="searchListCount" resultType="long">
+        select count(*)
+        FROM ${resourceDataDb}
+        WHERE (resource_data_id, iteration) IN (
+        SELECT resource_data_id, last_iteration
+        FROM ${resourceIterationDb}
+        WHERE workspace_id = #{workspaceId} <!-- 添加条件 -->
+        )
+        AND exist = 1
+        AND name like concat('%',#{name},'%')
+    </select>
+
+    <insert id="updateList">
+        insert into  ${resourceDataDb}(
+        <include refid="columns"/>
+        )
+        values(
+        #{resourceDateId},
+        #{name},
+        #{data},
+        #{createUserId},
+        #{updateUserId},
+        #{gmtCreate},
+        #{gmtUpdate},
+        #{workspaceId},
+        #{iteration},
+        #{exist}
+        )
+    </insert>
 
 
 

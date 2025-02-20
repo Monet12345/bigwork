@@ -1,9 +1,7 @@
 package com.bigwork.bigwork_apitest.web;
 
-import com.bigwork.bigwork_apitest.model.ListPageReq;
-import com.bigwork.bigwork_apitest.model.ResourceReq;
+import com.bigwork.bigwork_apitest.model.*;
 
-import com.bigwork.bigwork_apitest.model.VagueResourceVo;
 import com.bigwork.bigwork_apitest.service.ResourceService;
 import feign.Param;
 import io.swagger.annotations.Api;
@@ -40,6 +38,26 @@ public class ResourceController {
     Result<Page<VagueResourceVo>>getListPage(@RequestBody ListPageReq listPageReq){
         return Result.buildSuccess(resourceService.getListPage(listPageReq));
     }
+    @GetMapping("/getListDetail")
+    @ApiOperation(value = "根据Id获取表详情")
+    Result<ResourceVo>getListDetail(@RequestParam String resourceDateId, String workspaceId){
+        return Result.buildSuccess(resourceService.getListDetail(resourceDateId,workspaceId));
+    }
+
+    @PostMapping("/searchList")
+    @ApiOperation(value = "根据表名称搜索匹配的表")
+    Result<Page<VagueResourceVo>>searchList(@RequestBody SearchListReq searchListReq){
+
+        return Result.buildSuccess(resourceService.searchList(searchListReq));
+    }
+    @PostMapping("/addListMessage")
+    @ApiOperation(value = "往一张表中添加一条信息")
+    Result<String>addListMessage(@RequestBody ResourceReq resourceReq){
+        resourceService.addListMessage(resourceReq);
+        return Result.buildSuccess();
+    }
+
+
 
 
 
