@@ -66,6 +66,10 @@ public class ReceiveChatMessageImpl implements ReceiveChatMessage {
         User friend = userFacade.getUserById(chatDetailDo.getFriendId(),chatDetailDo.getWorkspaceId()).getData();
         friendListVo.setUserNickname(user.getNickName());
         friendListVo.setFriendNickname(friend.getNickName());
+        friendListVo.setContent(chatDetailDo.getContent());
+        friendListVo.setId(chatDetailDo.getId());
+
+
         channel.writeAndFlush(new TextWebSocketFrame(JsonSerializer.serializeToJson(friendListVo)));
 //        channel.writeAndFlush(new TextWebSocketFrame(sendMessage));
         log.info("已通知客户端有新消息");

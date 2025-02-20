@@ -2,6 +2,7 @@ package util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public final class JsonSerializer {
@@ -13,7 +14,10 @@ public final class JsonSerializer {
 
   // 静态的 ObjectMapper 实例
   private static final ObjectMapper objectMapper = new ObjectMapper();
-
+  static {
+    // 配置 ObjectMapper 忽略不匹配的字段
+    objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+  }
   /**
    * 将对象序列化为 JSON 字符串
    *

@@ -29,13 +29,13 @@
         <include refid="columns"/>
         )
         values(
-        #{userId},
-        #{workspaceId},
-        #{friendId},
-        #{contentUser},
-        #{content},
-        #{gmtUpdate},
-        #{type}
+        #{chatDetailDo.userId},
+        #{chatDetailDo.workspaceId},
+        #{chatDetailDo.friendId},
+        #{chatDetailDo.contentUser},
+        #{chatDetailDo.content},
+        #{chatDetailDo.gmtUpdate},
+        #{chatDetailDo.type}
         )
     </insert>
 

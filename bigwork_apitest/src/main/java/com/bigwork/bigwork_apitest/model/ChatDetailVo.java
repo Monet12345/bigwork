@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class ChatDetailVo {
-    private String id;
+    private Long id;
     private String userId;
     private String friendId;
     private String contentUserNickname;
