@@ -15,7 +15,7 @@ public interface ResourceDataMapper {
     @ResourceDbInterface(type = "write")
     void createList(ResourceDo resourceDo);
     @ResourceDbInterface(type = "write")
-    void deleteList(String resourceDateId,String workspaceId);
+    void deleteList(String resourceDataId,String workspaceId);
     @ResourceDbInterface(type = "write")
     void updateList (ResourceDo resourceDo);
     @ResourceDbInterface(type = "read")
@@ -23,7 +23,7 @@ public interface ResourceDataMapper {
     @ResourceDbInterface(type = "read")
     Long getListInPageCount(String workspaceId);
     @ResourceDbInterface(type = "read")
-    ResourceDo getListDetailById(String resourceDateId,String workspaceId);
+    ResourceDo getListDetailById(String resourceDataId,String workspaceId);
 
     @ResourceDbInterface(type = "read")
     List<ResourceDo> searchList(SearchListReq searchListR);

@@ -4,7 +4,8 @@ import lombok.Data;
 
 @Data
 public class VagueResourceVo {
-    private String resourceDateId;
+    private String resourceDataId;
     private String name;
     private String gmtCreate;
+    private String iteration;
 }

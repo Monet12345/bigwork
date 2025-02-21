@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class ResourceIterationDo {
-    private String resourceDateId;
+    private String resourceDataId;
     private int nowIteration;
     private int lastIteration;
 }

@@ -7,13 +7,13 @@ import model.PageForm;
 
 public interface ResourceService {
     void createList(ResourceReq resourceReq);
-    void deleteList(String resourceDateId,String workspaceId);
+    void deleteList(String resourceDataId,String workspaceId,int iteration);
 
     Page<VagueResourceVo> getListPage(ListPageReq listPageReq);
-    ResourceVo getListDetail(String resourceDateId,String workspaceId);
+    ResourceVo getListDetail(String resourceDataId,String workspaceId);
 
     Page<VagueResourceVo> searchList(SearchListReq searchListReq);
 
-    void addListMessage(ResourceReq resourceReq);
+    void updateListMessage(ResourceReq resourceReq);
 
 }

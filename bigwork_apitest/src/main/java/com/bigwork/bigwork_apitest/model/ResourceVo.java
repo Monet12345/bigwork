@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class ResourceVo {
-    private String resourceDateId;
+    private String resourceDataId;
     private String name;
     private String data;
     private String createUserId;

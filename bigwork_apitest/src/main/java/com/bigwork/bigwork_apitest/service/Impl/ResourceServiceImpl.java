@@ -40,18 +40,18 @@ public class ResourceServiceImpl implements ResourceService {
             }
             else {
                 ResourceDo resourceDo= BeanUtil.copyProperties(resourceReq,ResourceDo.class);
-                resourceDo.setResourceDateId(idManagementFacade.getNextId("R").getData());
+                resourceDo.setResourceDataId(idManagementFacade.getNextId("R").getData());
                 resourceDo.setGmtCreate(now());
                 resourceDo.setGmtUpdate(now());
                 resourceDo.setCreateUserId(resourceReq.getUpdateUserId());
                 resourceDo.setUpdateUserId(resourceReq.getUpdateUserId());
-                resourceDo.setExist("1");
+                resourceDo.setExist(1);
                 resourceDo.setIteration(1);
                 resourceDataMapper.createList(resourceDo);
                 ResourceIterationDo resourceIterationDo= new ResourceIterationDo();
                 resourceIterationDo.setNowIteration(1);
                 resourceIterationDo.setLastIteration(1);
-                resourceIterationDo.setResourceDateId(resourceDo.getResourceDateId());
+                resourceIterationDo.setResourceDataId(resourceDo.getResourceDataId());
                 resourceIterationDataMapper.createIteration(resourceIterationDo);
             }
 
@@ -60,8 +60,25 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
-    public void deleteList(String resourceDateId,String workspaceId) {
-        resourceDataMapper.deleteList(resourceDateId,workspaceId);
+    public void deleteList(String resourceDataId,String workspaceId,int iteration) {
+        synchronized (this){
+            if(checkIteration(resourceDataId,iteration)){
+                ResourceDo resourceDo = resourceDataMapper.getListDetailById(resourceDataId, workspaceId);
+                resourceDo.setIteration(iteration+1);
+                resourceDo.setExist(0);
+                resourceDataMapper.updateList(resourceDo);
+                ResourceIterationDo resourceIterationDo=new ResourceIterationDo();
+                resourceIterationDo.setResourceDataId(resourceDo.getResourceDataId());
+                resourceIterationDo.setNowIteration(resourceDo.getIteration());
+                resourceIterationDo.setLastIteration(resourceDo.getIteration());
+
+                resourceIterationDataMapper.update(resourceIterationDo);
+            }
+        }
+
+
+
+
     }
 
     @Override
@@ -71,8 +88,8 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
-    public ResourceVo getListDetail(String resourceDateId, String workspaceId) {
-        ResourceDo resourceDo = resourceDataMapper.getListDetailById(resourceDateId, workspaceId);
+    public ResourceVo getListDetail(String resourceDataId, String workspaceId) {
+        ResourceDo resourceDo = resourceDataMapper.getListDetailById(resourceDataId, workspaceId);
         return BeanUtil.copyProperties(resourceDo, ResourceVo.class);
     }
 
@@ -85,26 +102,44 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
-    public void addListMessage(ResourceReq resourceReq) {
+    public void updateListMessage(ResourceReq resourceReq) {
         synchronized (this) {
-        ResourceDataDto resourceNewDataDto = JsonSerializer.deserializeFromJson(resourceReq.getData(),ResourceDataDto.class);
-        ResourceDo resourceDo = resourceDataMapper.getListDetailById(resourceReq.getResourceDateId(),resourceReq.getWorkspaceId());
-        ResourceDataDto resourceDataDto=JsonSerializer.deserializeFromJson(resourceDo.getData(),ResourceDataDto.class);
-        resourceNewDataDto.getHead().forEach(resourceDataDto.getHead()::add);
-        resourceNewDataDto.getBody().forEach(resourceDataDto.getBody()::add);
-        resourceDo.setData(JsonSerializer.serializeToJson(resourceDataDto));
-            ResourceIterationDo resourceIterationDo=resourceIterationDataMapper.getIterationById(resourceReq.getResourceDateId());
-            ResourceIterationDo nowResourceIterationDo=resourceIterationDo;
-            nowResourceIterationDo.setLastIteration(resourceIterationDo.getNowIteration()+1);
-            nowResourceIterationDo.setNowIteration(resourceIterationDo.getNowIteration()+1);
-            resourceIterationDataMapper.update(nowResourceIterationDo);
-            resourceDo.setIteration(nowResourceIterationDo.getNowIteration());
-            resourceDo.setExist("1");
-            resourceDo.setGmtUpdate(now());
-            resourceDataMapper.updateList(resourceDo);
+            if(checkIteration(resourceReq.getResourceDataId(),resourceReq.getIteration())){
+
+
+
+
+//        ResourceDataDto resourceNewDataDto = JsonSerializer.deserializeFromJson(resourceReq.getData(),ResourceDataDto.class);
+//        ResourceDo resourceDo = resourceDataMapper.getListDetailById(resourceReq.getResourceDateId(),resourceReq.getWorkspaceId());
+//        ResourceDataDto resourceDataDto=JsonSerializer.deserializeFromJson(resourceDo.getData(),ResourceDataDto.class);
+//        resourceNewDataDto.getHead().forEach(resourceDataDto.getHead()::add);
+//        resourceNewDataDto.getBody().forEach(resourceDataDto.getBody()::add);
+//        resourceDo.setData(JsonSerializer.serializeToJson(resourceDataDto));
+//            ResourceIterationDo resourceIterationDo=resourceIterationDataMapper.getIterationById(resourceReq.getResourceDateId());
+//            ResourceIterationDo nowResourceIterationDo=resourceIterationDo;
+//            nowResourceIterationDo.setLastIteration(resourceIterationDo.getNowIteration()+1);
+//            nowResourceIterationDo.setNowIteration(resourceIterationDo.getNowIteration()+1);
+//            resourceIterationDataMapper.update(nowResourceIterationDo);
+//            resourceDo.setIteration(nowResourceIterationDo.getNowIteration());
+//            resourceDo.setExist(1);
+//            resourceDo.setGmtUpdate(now());
+//            resourceDataMapper.updateList(resourceDo);
         }
+        }
+}
 
 
+
+
+
+    private boolean checkIteration(String resourceDataId,int iteration){
+        ResourceIterationDo resourceIterationDo=resourceIterationDataMapper.getIterationById(resourceDataId);
+        if(resourceIterationDo.getNowIteration()==iteration){
+            return true;
+        }
+        else {
+            throw new BizException("迭代版本号错误,请刷新表数据");
+        }
     }
 
 }

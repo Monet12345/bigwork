@@ -29,8 +29,8 @@ public class ResourceController {
     }
     @GetMapping("/deleteList")
     @ApiOperation(value = "删除表接口")
-    Result<String>deleteList(@RequestParam String resourceDateId,String workspaceId){
-        resourceService.deleteList(resourceDateId,workspaceId);
+    Result<String>deleteList(@RequestParam String resourceDataId,String workspaceId,int iteration){
+        resourceService.deleteList(resourceDataId,workspaceId,iteration);
         return Result.buildSuccess();
     }
     @PostMapping("/getList")
@@ -40,8 +40,8 @@ public class ResourceController {
     }
     @GetMapping("/getListDetail")
     @ApiOperation(value = "根据Id获取表详情")
-    Result<ResourceVo>getListDetail(@RequestParam String resourceDateId, String workspaceId){
-        return Result.buildSuccess(resourceService.getListDetail(resourceDateId,workspaceId));
+    Result<ResourceVo>getListDetail(@RequestParam String resourceDataId, String workspaceId){
+        return Result.buildSuccess(resourceService.getListDetail(resourceDataId,workspaceId));
     }
 
     @PostMapping("/searchList")
@@ -50,12 +50,14 @@ public class ResourceController {
 
         return Result.buildSuccess(resourceService.searchList(searchListReq));
     }
-    @PostMapping("/addListMessage")
-    @ApiOperation(value = "往一张表中添加一条信息")
-    Result<String>addListMessage(@RequestBody ResourceReq resourceReq){
-        resourceService.addListMessage(resourceReq);
+    @PostMapping("/updateListMessage")
+    @ApiOperation(value = "往一张表中更新信息")
+    Result<String>updateListMessage(@RequestBody ResourceReq resourceReq){
+        resourceService.updateListMessage(resourceReq);
         return Result.buildSuccess();
     }
+
+
 
 
 

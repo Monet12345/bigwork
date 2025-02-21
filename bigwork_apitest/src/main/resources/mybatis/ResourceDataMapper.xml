@@ -18,7 +18,7 @@
     </sql>
 
     <resultMap id="resultMap" type="ResourceDo">
-        <id property="resourceDateId" column="resource_data_id"/>
+        <id property="resourceDataId" column="resource_data_id"/>
         <result property="name" column="name"/>
         <result property="data" column="data"/>
         <result property="createUserId" column="create_user_id"/>
@@ -35,7 +35,7 @@
         <include refid="columns"/>
         )
         values(
-        #{resourceDateId},
+        #{resourceDataId},
         #{name},
         #{data},
         #{createUserId},
@@ -51,12 +51,12 @@
     <update id="deleteList">
         update ${resourceDataDb}
         set exist = 0
-        where resource_data_id = #{resourceDateId}
+        where resource_data_id = #{resourceDataId}
         and workspace_id = #{workspaceId}
         and iteration in(
             select last_iteration as iteration
             from ${resourceIterationDb}
-            where resource_data_id = #{resourceDateId}
+            where resource_data_id = #{resourceDataId}
             and workspace_id = #{workspaceId}
             )
     </update>
@@ -91,7 +91,7 @@
         SELECT resource_data_id, last_iteration
         FROM ${resourceIterationDb}
         WHERE workspace_id = #{workspaceId}
-        and resource_data_id=#{resourceDateId}
+        and resource_data_id=#{resourceDataId}
         )
         AND exist = 1
     </select>
@@ -126,7 +126,7 @@
         <include refid="columns"/>
         )
         values(
-        #{resourceDateId},
+        #{resourceDataId},
         #{name},
         #{data},
         #{createUserId},

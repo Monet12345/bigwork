@@ -4,9 +4,10 @@ import lombok.Data;
 
 @Data
 public class ResourceReq {
-    private String resourceDateId;
+    private String resourceDataId;
     private String name;
     private String data;
     private String updateUserId;
     private String workspaceId;
+    private int iteration;
 }

@@ -12,7 +12,7 @@
 
 
     <resultMap id="resultMap" type="ResourceIterationDo">
-        <id property="resourceDateId" column="resouce_data_id"/>
+        <id property="resourceDataId" column="resouce_data_id"/>
         <result property="nowIteration" column="now_iteration"/>
         <result property="lastIteration" column="last_iteration"/>
 
@@ -22,7 +22,7 @@
         <include refid="columns"/>
         )
         values(
-        #{resourceDateId},
+        #{resourceDataId},
         #{nowIteration},
         #{lastIteration}
         )
@@ -30,14 +30,14 @@
     <select id="getIterationById" resultMap="resultMap">
         SELECT <include refid="columns"/>
         FROM ${resourceIterationDb}
-        WHERE resource_data_id = #{resourceDateId}
+        WHERE resource_data_id = #{resourceDataId}
     </select>
 
     <update id="update">
         update ${resourceIterationDb}
         set now_iteration = #{nowIteration},
         last_iteration = #{lastIteration}
-        where resource_data_id = #{resourceDateId}
+        where resource_data_id = #{resourceDataId}
     </update>
 
 

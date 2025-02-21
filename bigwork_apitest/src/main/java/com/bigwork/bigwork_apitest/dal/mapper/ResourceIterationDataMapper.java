@@ -13,7 +13,7 @@ public interface ResourceIterationDataMapper {
     int update(ResourceIterationDo resourceIterationDo);
 
     @ResourceDbInterface(type = "read")
-    ResourceIterationDo getIterationById(String resourceDateId);
+    ResourceIterationDo getIterationById(String resourceDataId);
 
 
 
