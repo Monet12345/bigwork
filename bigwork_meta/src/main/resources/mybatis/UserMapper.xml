@@ -39,4 +39,10 @@
         where user_id = #{userId}
         and workspace_id = #{workspaceId}
     </select>
+
+    <select id="getUserByWorkspaceId" resultMap="resultMap">
+        select <include refid="columns"/>
+        from user_db
+        where workspace_id = #{workspaceId}
+    </select>
 </mapper>

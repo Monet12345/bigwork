@@ -11,6 +11,7 @@ import model.User;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @Api(tags = "获取用户信息相关facade")
@@ -21,5 +22,12 @@ public class UserFacadeController implements UserFacade {
         UserDo userDo = userMapper.selectByUserId(userId,workspaceId);
         User user = BeanUtil.copyProperties(userDo,User.class);
         return Result.buildSuccess(user);
+    }
+
+    @Override
+    public Result<List<User>> getUserByWorkspaceId(String workspaceId) {
+        List<UserDo> userDos = userMapper.getUserByWorkspaceId(workspaceId);
+        List<User> users = BeanUtil.copyToList(userDos, User.class);
+        return Result.buildSuccess(users);
     }
 }

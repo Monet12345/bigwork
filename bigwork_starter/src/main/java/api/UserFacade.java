@@ -6,6 +6,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @FeignClient(
         name = "userFacade",
         url = "${bigwork.meta.server}",
@@ -16,4 +18,8 @@ public interface UserFacade {
     String BASE="/userFacade";
     @GetMapping(INTERNAL_BASE+BASE+"/getUserById")
     Result<User> getUserById(@RequestParam("userId") String userId,@RequestParam("workspaceId") String workspaceId);
+
+    @GetMapping(INTERNAL_BASE+BASE+"/getUserByWorkspaceId")
+    Result<List<User>> getUserByWorkspaceId(@RequestParam("workspaceId") String workspaceId);
+
 }

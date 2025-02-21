@@ -48,6 +48,10 @@
         and workspace_id = #{workspaceId}
     </update>
 
+    <insert id="insertFriendList">
+        insert into user_chat_db(user_id,friend_id,unread,gmt_update,workspace_id,status)
+        values(#{userId},#{friendId},#{unread},#{gmtUpdate},#{workspaceId},#{status})
+    </insert>
 
 
 </mapper>

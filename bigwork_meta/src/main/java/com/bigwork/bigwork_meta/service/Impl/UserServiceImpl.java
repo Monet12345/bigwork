@@ -1,5 +1,6 @@
 package com.bigwork.bigwork_meta.service.Impl;
 
+import api.FriendListFacade;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
@@ -42,6 +43,7 @@ public class UserServiceImpl implements UserService {
   private UserMapper userMapper;
 
   @Resource private RedisTemplate<String, Object> redisTemplate;
+  @Resource private FriendListFacade friendListFacade;
 
   private static final int SALT_LENGTH = 16; // 盐的长度
 
@@ -88,6 +90,9 @@ public class UserServiceImpl implements UserService {
       userDo.setNickName("未定义昵称（请自行修改昵称）");
     }
     userMapper.add(userDo);
+
+    friendListFacade.setChatFriends(userDo.getUserId(),userDo.getWorkspaceId());
+
   }
 
   @Override

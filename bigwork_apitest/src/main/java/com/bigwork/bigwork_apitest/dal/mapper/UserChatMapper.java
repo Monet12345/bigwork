@@ -12,5 +12,6 @@ public interface UserChatMapper {
   FriendListDo getFriendListByUserIdAndFriendId( String userId,String friendId,String workspaceId);
   void updateFriendList(FriendListDo friendListDo);
 
+  void insertFriendList(FriendListDo friendListDo);
 
 }
