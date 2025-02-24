@@ -26,7 +26,7 @@ public class RescourceDbAop {
     public void pointcut(){}
 
     @Around("pointcut()")
-    public void around(ProceedingJoinPoint joinPoint){
+    public void around(ProceedingJoinPoint joinPoint) throws Throwable {
         // 获取方法签名
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
@@ -35,7 +35,7 @@ public class RescourceDbAop {
         String type = resourceDbInterface.type();
         setResourceDbType(type);
         log.info("资源共享模块，切换数据库读写成功，上次请求的数据库状态为："+type);
-
+        joinPoint.proceed();
     }
     private void setResourceDbType(String type){
         try {
@@ -57,16 +57,8 @@ public class RescourceDbAop {
             SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader, properties);
             // 获取 Configuration 对象
             Configuration configuration = sqlSessionFactory.getConfiguration();
+            configuration.setVariables(properties);
 
-            // 通过反射获取字段
-            Field field = Configuration.class.getDeclaredField("resourceDataDb");
-            field.setAccessible(true); // 设置可访问
-
-            // 修改字段值
-            field.set(configuration, properties.getProperty("resourceDataDb"));
-            field = Configuration.class.getDeclaredField("resourceIterationDb");
-            field.setAccessible(true);
-            field.set(configuration, properties.getProperty("resourceIterationDb"));
 
         } catch (Exception e) {
              throw new RuntimeException("Failed to set resource db type", e);

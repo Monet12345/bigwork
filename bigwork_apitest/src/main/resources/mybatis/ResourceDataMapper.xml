@@ -81,6 +81,25 @@
     </select>
 
 
+    <update id="updateList">
+        update ${resourceDataDb}
+        set
+        <if test="name!=null">
+            name = #{name},
+        </if>
+        <if test="data!=null">
+            data = #{data},
+        </if>
+        <if test="gmtUpdate!=null">
+            gmt_update = #{gmtUpdate},
+        </if>
+        <if test="exist!=null">
+            exist = #{exist},
+        </if>
+        where resource_data_id = #{resourceDataId}
+        and workspace_id = #{workspaceId}
+        and iteration =#{iteration}
+    </update>
 
 
 

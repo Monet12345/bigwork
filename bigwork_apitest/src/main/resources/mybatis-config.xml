@@ -4,11 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 
 <configuration>
-    <!-- 定义属性 -->
     <properties>
-        <property name="resourceDataDb" value="resource_data_write_db"/>
-        <property name="resourceIterationDb" value="resource_iteration_data_write_db"/>
+        <property name="resourceDataDb" value="${resourceDataDb}"/>
+        <property name="resourceIterationDb" value="${resourceIterationDb}"/>
     </properties>
-
-
 </configuration>

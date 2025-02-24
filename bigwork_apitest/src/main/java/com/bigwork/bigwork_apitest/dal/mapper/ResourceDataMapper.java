@@ -5,6 +5,7 @@ import com.bigwork.bigwork_apitest.model.ListPageReq;
 import com.bigwork.bigwork_apitest.model.ResourceDo;
 import com.bigwork.bigwork_apitest.model.SearchListReq;
 import com.bigwork.bigwork_apitest.model.VagueResourceVo;
+import feign.Param;
 import model.PageForm;
 import org.mapstruct.Mapper;
 
@@ -14,7 +15,7 @@ import java.util.List;
 
 public interface ResourceDataMapper {
     @ResourceDbInterface(type = "write")
-    void createList(ResourceDo resourceDo);
+    void createList( ResourceDo resourceDo);
     @ResourceDbInterface(type = "write")
     void deleteList(String resourceDataId,String iteration,String workspaceId);
     @ResourceDbInterface(type = "write")

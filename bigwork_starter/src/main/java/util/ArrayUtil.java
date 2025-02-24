@@ -21,11 +21,14 @@ public class ArrayUtil {
         page.setPageNo(pageNo);
         page.setPageSize(pageSize);
         page.setTotal(total);
+        if(list != null){
+            List<T> copiedList = list.stream()
+                    .map(item -> BeanUtil.copyProperties(item, type))
+                    .collect(Collectors.toList());
+            page.setList(copiedList);
+        }
         // 使用 Hutool 的 BeanUtil 复制列表中的每个对象
-        List<T> copiedList = list.stream()
-                .map(item -> BeanUtil.copyProperties(item, type))
-                .collect(Collectors.toList());
-        page.setList(copiedList);
+
         return page;
     }
 }

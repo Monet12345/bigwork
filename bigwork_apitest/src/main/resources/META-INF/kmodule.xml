@@ -1,0 +1,5 @@
+<kmodule xmlns="http://www.drools.org/xsd/kmodule">
+    <kbase name="ResourseMargeRules" packages="com.sample.drools.rules">
+        <ksession name="ksession-rules"/>
+    </kbase>
+</kmodule>

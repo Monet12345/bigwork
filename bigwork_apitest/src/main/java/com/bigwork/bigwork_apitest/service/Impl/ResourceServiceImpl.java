@@ -2,6 +2,7 @@ package com.bigwork.bigwork_apitest.service.Impl;
 
 import api.IdManagementFacade;
 import cn.hutool.core.bean.BeanUtil;
+import com.bigwork.bigwork_apitest.common.ResourseMargeRules;
 import com.bigwork.bigwork_apitest.dal.mapper.ResourceDataMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.bigwork.bigwork_apitest.dal.mapper.ResourceIterationDataMapper;
@@ -22,8 +23,10 @@ import javax.annotation.Resource;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static cn.hutool.core.date.DateUtil.now;
+import static java.lang.Math.max;
 
 @Component
 @Slf4j
@@ -34,6 +37,8 @@ public class ResourceServiceImpl implements ResourceService {
     private ResourceIterationDataMapper resourceIterationDataMapper;
     @Resource
     private IdManagementFacade idManagementFacade;
+    @Resource
+    private ResourcePathMap resourcePathMap;
 
     //提交表单，当需要新建时，resourceDataId和iteration均传父节点的值
     @Override
@@ -50,8 +55,7 @@ public class ResourceServiceImpl implements ResourceService {
             resourceDataMapper.updateList(resourceDo2);
 
             //覆盖后让数据同步到后面的节点
-
-
+            toNextPointAndUpdate(resourceDo2);
 
         }
         else{
@@ -78,10 +82,12 @@ public class ResourceServiceImpl implements ResourceService {
                 resourceIterationDo.setGmtUpdate(now());
                 resourceIterationDo.setGmtCreate(resourceDo.getGmtCreate());
                 resourceIterationDataMapper.add(resourceIterationDo);
-                ResourcePathMap.getInstance().addPoint(resourceIterationDo.getIteration(),resourceIterationDo.getResourceDataId(),resourceIterationDo.getWorkspaceId());
+                resourcePathMap.addPoint(resourceIterationDo.getIteration(),resourceIterationDo.getResourceDataId(),resourceIterationDo.getWorkspaceId());
             }
         }
     }
+
+
 
     @Override
     public void deleteList(String resourceDataId,String workspaceId,String iteration) {
@@ -90,7 +96,7 @@ public class ResourceServiceImpl implements ResourceService {
                     throw new BizException("表不存在");
                 }
         resourceDataMapper.deleteList(resourceDataId,iteration,workspaceId);
-        ResourcePathMap.getInstance().deletePoint(resourceDo.getIteration(),resourceDo.getResourceDataId(),resourceDo.getWorkspaceId());
+        resourcePathMap.deletePoint(resourceDo.getIteration(),resourceDo.getResourceDataId(),resourceDo.getWorkspaceId());
 
     }
 
@@ -111,10 +117,58 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Override
     public List<List<String>> getIterationTree(String resourceDataId, String workspaceId) {
-        return ResourcePathMap.getInstance().getIterationTree(resourceDataId,workspaceId);
+        return resourcePathMap.getIterationTree(resourceDataId,workspaceId);
     }
 
+    void toNextPointAndUpdate(ResourceDo resourceDoNow){
+        String iteration = resourceDoNow.getIteration();
+        String resourceDataId = resourceDoNow.getResourceDataId();
+        String workspaceId = resourceDoNow.getWorkspaceId();
+        String data = resourceDoNow.getData();
+        List<List<String>> iterationTree = resourcePathMap.getIterationTree(resourceDataId,workspaceId);
+        int nowPoint= resourcePathMap.getMap2().get(iteration);
+        iterationTree.get(nowPoint).forEach((point)->{
+            ResourseMargeRulesFact resourseMargeRulesFact = new ResourseMargeRulesFact();
+            ResourceDataDto dataDto2 = JsonSerializer.deserializeFromJson(data, new TypeReference<ResourceDataDto>() {});
+            resourseMargeRulesFact.setData2(dataDto2);
 
+            ResourceDo resourceDo = resourceDataMapper.getListDetailById(resourceDataId,point,workspaceId);
+            ResourceDataDto dataDto1=JsonSerializer.deserializeFromJson(resourceDo.getData(), new TypeReference<ResourceDataDto>() {});
+
+            resourseMargeRulesFact.setData1(dataDto1);
+
+            dataDto2.getHead().forEach((head)->{
+                if(!dataDto1.getHead().contains(head)){
+                    dataDto1.getHead().add(head);
+                }
+            });
+            List<Integer> rowDeference = new ArrayList<>();
+            for(int i=0;i<dataDto2.getBody().size();i++){
+                int cnt=0;//重复个数
+                int rowCnt=0;
+                for(int j=0;j<dataDto1.getBody().size();j++){
+                    for(int k=0;k<dataDto2.getBody().get(0).size();k++){
+                        if(!Objects.equals(dataDto2.getBody().get(i).get(k), dataDto1.getBody().get(j).get(k))){
+                            rowCnt++;
+                        }
+                    }
+                    cnt=max(cnt,rowCnt);
+                    rowCnt=0;
+                }
+                rowDeference.add(cnt);
+                cnt=0;
+            }
+            resourseMargeRulesFact.setRowDeference(rowDeference);
+            ResourseMargeRules.run(resourseMargeRulesFact);
+            resourceDo.setData(JsonSerializer.serializeToJson(resourseMargeRulesFact.getFactData()));
+            resourceDo.setName(resourceDoNow.getName());
+            resourceDo.setCreateUserId(resourceDoNow.getCreateUserId());
+            resourceDo.setUpdateUserId(resourceDoNow.getUpdateUserId());
+            resourceDo.setGmtUpdate(now());
+            resourceDataMapper.updateList(resourceDo);
+            toNextPointAndUpdate(resourceDo);
+        });
+    }
 
 
 
