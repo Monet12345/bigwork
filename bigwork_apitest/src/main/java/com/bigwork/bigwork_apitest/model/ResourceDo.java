@@ -12,6 +12,6 @@ public class ResourceDo {
     private String gmtCreate;
     private String gmtUpdate;
     private String workspaceId;
-    private int iteration;
+    private String iteration;
     private int exist;
 }

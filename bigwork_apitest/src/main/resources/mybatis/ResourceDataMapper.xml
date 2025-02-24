@@ -53,91 +53,36 @@
         set exist = 0
         where resource_data_id = #{resourceDataId}
         and workspace_id = #{workspaceId}
-        and iteration in(
-            select last_iteration as iteration
-            from ${resourceIterationDb}
-            where resource_data_id = #{resourceDataId}
-            and workspace_id = #{workspaceId}
-            )
+        and iteration = #{iteration}
     </update>
 
-    <select id="getListInPage" resultMap="resultMap">
-        SELECT <include refid="columns"/>
+    <select id="getListInPage" resultType="VagueResourceVo">
+        SELECT DISTINCT resource_data_id as resourceDataId,name,max(gmt_create) as gmtCreate,workspace_id as workspaceId
         FROM ${resourceDataDb}
-        WHERE (resource_data_id, iteration) IN (
-        SELECT resource_data_id, last_iteration
-        FROM ${resourceIterationDb}
-        WHERE workspace_id = #{workspaceId} <!-- 添加条件 -->
-        )
-        AND exist = 1
+        where exist = 1
+        group by resource_data_id,name,workspace_id
+        having workspace_id=#{workspaceId}
         LIMIT #{offset},#{pageSize}
     </select>
 
     <select id="getListInPageCount" resultType="long">
         SELECT count(*)
         FROM ${resourceDataDb}
-        WHERE (resource_data_id, iteration) IN (
-        SELECT resource_data_id, last_iteration
-        FROM ${resourceIterationDb}
-        WHERE workspace_id = #{workspaceId} <!-- 添加条件 -->
-        )
-        AND exist = 1
+        where exist = 1
+        group by resource_data_id,name,workspace_id
+        having workspace_id=#{workspaceId}
     </select>
 
     <select id="getListDetailById" resultMap="resultMap">
         SELECT <include refid="columns"/>
         FROM ${resourceDataDb}
-        WHERE (resource_data_id, iteration) IN (
-        SELECT resource_data_id, last_iteration
-        FROM ${resourceIterationDb}
-        WHERE workspace_id = #{workspaceId}
-        and resource_data_id=#{resourceDataId}
-        )
+        WHERE resource_data_id=#{resourceDataId} and workspace_id=#{workspaceId} and iteration=#{iteration}
         AND exist = 1
     </select>
 
-    <select id="searchList" resultMap="resultMap">
-        SELECT <include refid="columns"/>
-        FROM ${resourceDataDb}
-        WHERE (resource_data_id, iteration) IN (
-        SELECT resource_data_id, last_iteration
-        FROM ${resourceIterationDb}
-        WHERE workspace_id = #{workspaceId} <!-- 添加条件 -->
-        )
-        AND exist = 1
-        AND name like concat('%',#{name},'%')
-        LIMIT #{offset},#{pageSize}
-    </select>
 
-    <select id="searchListCount" resultType="long">
-        select count(*)
-        FROM ${resourceDataDb}
-        WHERE (resource_data_id, iteration) IN (
-        SELECT resource_data_id, last_iteration
-        FROM ${resourceIterationDb}
-        WHERE workspace_id = #{workspaceId} <!-- 添加条件 -->
-        )
-        AND exist = 1
-        AND name like concat('%',#{name},'%')
-    </select>
 
-    <insert id="updateList">
-        insert into  ${resourceDataDb}(
-        <include refid="columns"/>
-        )
-        values(
-        #{resourceDataId},
-        #{name},
-        #{data},
-        #{createUserId},
-        #{updateUserId},
-        #{gmtCreate},
-        #{gmtUpdate},
-        #{workspaceId},
-        #{iteration},
-        #{exist}
-        )
-    </insert>
+
 
 
 

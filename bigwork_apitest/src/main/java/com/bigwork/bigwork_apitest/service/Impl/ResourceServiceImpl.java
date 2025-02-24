@@ -3,7 +3,7 @@ package com.bigwork.bigwork_apitest.service.Impl;
 import api.IdManagementFacade;
 import cn.hutool.core.bean.BeanUtil;
 import com.bigwork.bigwork_apitest.dal.mapper.ResourceDataMapper;
-
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.bigwork.bigwork_apitest.dal.mapper.ResourceIterationDataMapper;
 
 import com.bigwork.bigwork_apitest.model.*;
@@ -20,6 +20,7 @@ import util.JsonSerializer;
 
 import javax.annotation.Resource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static cn.hutool.core.date.DateUtil.now;
@@ -33,113 +34,88 @@ public class ResourceServiceImpl implements ResourceService {
     private ResourceIterationDataMapper resourceIterationDataMapper;
     @Resource
     private IdManagementFacade idManagementFacade;
+
+    //提交表单，当需要新建时，resourceDataId和iteration均传父节点的值
     @Override
-    public void createList(ResourceReq resourceReq) {
+    public void submitList(ResourceReq resourceReq) {
+
+        //当表已经存在时，做覆盖，不存在时做新建
+        ResourceDo resourceDo1 = resourceDataMapper.getListDetailById(resourceReq.getResourceDataId(),resourceReq.getIteration(),resourceReq.getWorkspaceId());
+        if(resourceDo1!=null){
+            ResourceDo resourceDo2=resourceDo1;
+            resourceDo2.setName(resourceReq.getName());
+            resourceDo2.setData(resourceReq.getData());
+            resourceDo2.setUpdateUserId(resourceReq.getUpdateUserId());
+            resourceDo2.setGmtUpdate(now());
+            resourceDataMapper.updateList(resourceDo2);
+
+            //覆盖后让数据同步到后面的节点
+
+
+
+        }
+        else{
+            //新建操作
             if(resourceReq.getName().isEmpty()){
                 throw new BizException("建表时表名不能为空");
             }
             else {
+                //
                 ResourceDo resourceDo= BeanUtil.copyProperties(resourceReq,ResourceDo.class);
-                resourceDo.setResourceDataId(idManagementFacade.getNextId("R").getData());
+                resourceDo.setResourceDataId(idManagementFacade.getNextId("Resource"+"workspaceId").getData());
                 resourceDo.setGmtCreate(now());
                 resourceDo.setGmtUpdate(now());
                 resourceDo.setCreateUserId(resourceReq.getUpdateUserId());
                 resourceDo.setUpdateUserId(resourceReq.getUpdateUserId());
                 resourceDo.setExist(1);
-                resourceDo.setIteration(1);
+                String iteration = idManagementFacade.getNextId("Iteration").getData();
+                resourceDo.setIteration(iteration);
                 resourceDataMapper.createList(resourceDo);
-                ResourceIterationDo resourceIterationDo= new ResourceIterationDo();
-                resourceIterationDo.setNowIteration(1);
-                resourceIterationDo.setLastIteration(1);
+                ResourceIterationDo resourceIterationDo= BeanUtil.copyProperties(resourceReq,ResourceIterationDo.class);
+                resourceIterationDo.setIteration(iteration);
                 resourceIterationDo.setResourceDataId(resourceDo.getResourceDataId());
-                resourceIterationDataMapper.createIteration(resourceIterationDo);
+                resourceIterationDo.setParent(resourceReq.getIteration());
+                resourceIterationDo.setGmtUpdate(now());
+                resourceIterationDo.setGmtCreate(resourceDo.getGmtCreate());
+                resourceIterationDataMapper.add(resourceIterationDo);
+                ResourcePathMap.getInstance().addPoint(resourceIterationDo.getIteration(),resourceIterationDo.getResourceDataId(),resourceIterationDo.getWorkspaceId());
             }
-
-
-
+        }
     }
 
     @Override
-    public void deleteList(String resourceDataId,String workspaceId,int iteration) {
-        synchronized (this){
-            if(checkIteration(resourceDataId,iteration)){
-                ResourceDo resourceDo = resourceDataMapper.getListDetailById(resourceDataId, workspaceId);
-                resourceDo.setIteration(iteration+1);
-                resourceDo.setExist(0);
-                resourceDataMapper.updateList(resourceDo);
-                ResourceIterationDo resourceIterationDo=new ResourceIterationDo();
-                resourceIterationDo.setResourceDataId(resourceDo.getResourceDataId());
-                resourceIterationDo.setNowIteration(resourceDo.getIteration());
-                resourceIterationDo.setLastIteration(resourceDo.getIteration());
-
-                resourceIterationDataMapper.update(resourceIterationDo);
-            }
-        }
-
-
-
+    public void deleteList(String resourceDataId,String workspaceId,String iteration) {
+                ResourceDo resourceDo = resourceDataMapper.getListDetailById(resourceDataId,iteration, workspaceId);
+                if(resourceDo==null){
+                    throw new BizException("表不存在");
+                }
+        resourceDataMapper.deleteList(resourceDataId,iteration,workspaceId);
+        ResourcePathMap.getInstance().deletePoint(resourceDo.getIteration(),resourceDo.getResourceDataId(),resourceDo.getWorkspaceId());
 
     }
 
     @Override
     public Page<VagueResourceVo> getListPage(ListPageReq listPageReq) {
-        List<ResourceDo> resourceDos = resourceDataMapper.getListInPage(listPageReq);
+        List<VagueResourceVo> resourceDos = resourceDataMapper.getListInPage(listPageReq);
         return ArrayUtil.listToPage(resourceDos,listPageReq.getPageNo(),listPageReq.getPageSize(),resourceDataMapper.getListInPageCount(listPageReq.getWorkspaceId()),VagueResourceVo.class);
     }
 
+
+
     @Override
-    public ResourceVo getListDetail(String resourceDataId, String workspaceId) {
-        ResourceDo resourceDo = resourceDataMapper.getListDetailById(resourceDataId, workspaceId);
+    public ResourceVo getListDetail(String resourceDataId,String iteration, String workspaceId) {
+        ResourceDo resourceDo = resourceDataMapper.getListDetailById(resourceDataId, iteration,workspaceId);
         return BeanUtil.copyProperties(resourceDo, ResourceVo.class);
     }
 
-    @Override
-    //根据name模糊匹配搜索表信息
-    public Page<VagueResourceVo> searchList(SearchListReq searchListReq) {
-        List<ResourceDo> resourceDos = resourceDataMapper.searchList(searchListReq);
-        return ArrayUtil.listToPage(resourceDos,searchListReq.getPageNo(),searchListReq.getPageSize(),resourceDataMapper.searchListCount(searchListReq.getName(),searchListReq.getWorkspaceId()),VagueResourceVo.class);
-
-    }
 
     @Override
-    public void updateListMessage(ResourceReq resourceReq) {
-        synchronized (this) {
-            if(checkIteration(resourceReq.getResourceDataId(),resourceReq.getIteration())){
-
-
-
-
-//        ResourceDataDto resourceNewDataDto = JsonSerializer.deserializeFromJson(resourceReq.getData(),ResourceDataDto.class);
-//        ResourceDo resourceDo = resourceDataMapper.getListDetailById(resourceReq.getResourceDateId(),resourceReq.getWorkspaceId());
-//        ResourceDataDto resourceDataDto=JsonSerializer.deserializeFromJson(resourceDo.getData(),ResourceDataDto.class);
-//        resourceNewDataDto.getHead().forEach(resourceDataDto.getHead()::add);
-//        resourceNewDataDto.getBody().forEach(resourceDataDto.getBody()::add);
-//        resourceDo.setData(JsonSerializer.serializeToJson(resourceDataDto));
-//            ResourceIterationDo resourceIterationDo=resourceIterationDataMapper.getIterationById(resourceReq.getResourceDateId());
-//            ResourceIterationDo nowResourceIterationDo=resourceIterationDo;
-//            nowResourceIterationDo.setLastIteration(resourceIterationDo.getNowIteration()+1);
-//            nowResourceIterationDo.setNowIteration(resourceIterationDo.getNowIteration()+1);
-//            resourceIterationDataMapper.update(nowResourceIterationDo);
-//            resourceDo.setIteration(nowResourceIterationDo.getNowIteration());
-//            resourceDo.setExist(1);
-//            resourceDo.setGmtUpdate(now());
-//            resourceDataMapper.updateList(resourceDo);
-        }
-        }
-}
-
-
-
-
-
-    private boolean checkIteration(String resourceDataId,int iteration){
-        ResourceIterationDo resourceIterationDo=resourceIterationDataMapper.getIterationById(resourceDataId);
-        if(resourceIterationDo.getNowIteration()==iteration){
-            return true;
-        }
-        else {
-            throw new BizException("迭代版本号错误,请刷新表数据");
-        }
+    public List<List<String>> getIterationTree(String resourceDataId, String workspaceId) {
+        return ResourcePathMap.getInstance().getIterationTree(resourceDataId,workspaceId);
     }
+
+
+
+
 
 }

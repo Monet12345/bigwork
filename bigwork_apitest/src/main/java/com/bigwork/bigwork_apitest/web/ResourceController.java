@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import util.BizException;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/resource")
@@ -21,15 +23,15 @@ public class ResourceController {
     @Resource
     private ResourceService resourceService;
 
-    @PostMapping("/createList")
-    @ApiOperation(value = "建表接口")
-    Result<String>createList(@RequestBody ResourceReq resourceReq){
-        resourceService.createList(resourceReq);
+    @PostMapping("/submitList")
+    @ApiOperation(value = "提交表单")
+    Result<String>submitList(@RequestBody ResourceReq resourceReq){
+        resourceService.submitList(resourceReq);
         return Result.buildSuccess();
     }
     @GetMapping("/deleteList")
     @ApiOperation(value = "删除表接口")
-    Result<String>deleteList(@RequestParam String resourceDataId,String workspaceId,int iteration){
+    Result<String>deleteList(@RequestParam String resourceDataId,String workspaceId,String iteration){
         resourceService.deleteList(resourceDataId,workspaceId,iteration);
         return Result.buildSuccess();
     }
@@ -38,24 +40,22 @@ public class ResourceController {
     Result<Page<VagueResourceVo>>getListPage(@RequestBody ListPageReq listPageReq){
         return Result.buildSuccess(resourceService.getListPage(listPageReq));
     }
+    @PostMapping("/getIterationTree")
+    @ApiOperation(value = "获取表的版本树")
+    Result<List<List<String>>>getIterationTree(@RequestParam String resourceDataId,String workspaceId){
+        return Result.buildSuccess(resourceService.getIterationTree(resourceDataId,workspaceId));
+    }
+
+
     @GetMapping("/getListDetail")
-    @ApiOperation(value = "根据Id获取表详情")
-    Result<ResourceVo>getListDetail(@RequestParam String resourceDataId, String workspaceId){
-        return Result.buildSuccess(resourceService.getListDetail(resourceDataId,workspaceId));
+    @ApiOperation(value = "根据Id和版本号获取表详情")
+    Result<ResourceVo>getListDetail(@RequestParam String resourceDataId, String iteration,String workspaceId){
+        return Result.buildSuccess(resourceService.getListDetail(resourceDataId,iteration,workspaceId));
     }
 
-    @PostMapping("/searchList")
-    @ApiOperation(value = "根据表名称搜索匹配的表")
-    Result<Page<VagueResourceVo>>searchList(@RequestBody SearchListReq searchListReq){
 
-        return Result.buildSuccess(resourceService.searchList(searchListReq));
-    }
-    @PostMapping("/updateListMessage")
-    @ApiOperation(value = "往一张表中更新信息")
-    Result<String>updateListMessage(@RequestBody ResourceReq resourceReq){
-        resourceService.updateListMessage(resourceReq);
-        return Result.buildSuccess();
-    }
+
+
 
 
 

@@ -7,5 +7,5 @@ public class VagueResourceVo {
     private String resourceDataId;
     private String name;
     private String gmtCreate;
-    private String iteration;
+    private String workspaceId;
 }

@@ -6,40 +6,67 @@
 
     <sql id="columns">
         resource_data_id,
-        now_iteration,
-        last_iteration
+        iteration,
+        parent,
+        workspace_id,
+        update_user_id,
+        gmt_create,
+        gmt_update
     </sql>
 
 
     <resultMap id="resultMap" type="ResourceIterationDo">
         <id property="resourceDataId" column="resouce_data_id"/>
-        <result property="nowIteration" column="now_iteration"/>
-        <result property="lastIteration" column="last_iteration"/>
-
+        <result property="iteration" column="iteration"/>
+        <result property="parent" column="parent"/>
+        <result property="workspaceId" column="workspace_id"/>
+        <result property="updateUserId" column="update_user_id"/>
+        <result property="gmtCreate" column="gmt_create"/>
+        <result property="gmtUpdate" column="gmt_update"/>
     </resultMap>
-    <insert id="createIteration">
+    <insert id="add">
         insert into ${resourceIterationDb}(
         <include refid="columns"/>
         )
         values(
-        #{resourceDataId},
-        #{nowIteration},
-        #{lastIteration}
+                #{resourceIterationDo.resourceDataId},
+                #{resourceIterationDo.iteration},
+                #{resourceIterationDo.parent},
+                #{resourceIterationDo.workspaceId},
+                #{resourceIterationDo.updateUserId},
+                #{resourceIterationDo.gmtCreate},
+                #{resourceIterationDo.gmtUpdate}
         )
     </insert>
-    <select id="getIterationById" resultMap="resultMap">
+    <select id="getDetailById" resultMap="resultMap">
         SELECT <include refid="columns"/>
         FROM ${resourceIterationDb}
         WHERE resource_data_id = #{resourceDataId}
+        AND workspace_id = #{workspaceId}
+        AND iteration = #{iteration}
+
     </select>
 
-    <update id="update">
+    <delete id="deleteById">
+        DELETE FROM ${resourceIterationDb}
+        WHERE resource_data_id = #{resourceDataId}
+        AND workspace_id = #{workspaceId}
+        AND iteration = #{iteration}
+    </delete>
+
+    <update id="updateParent">
         update ${resourceIterationDb}
-        set now_iteration = #{nowIteration},
-        last_iteration = #{lastIteration}
+        set parent = #{parent}
         where resource_data_id = #{resourceDataId}
+        and workspace_id = #{workspaceId}
+        and iteration = #{iteration}
     </update>
 
+
+    <select id="getAll" resultMap="resultMap">
+        SELECT <include refid="columns"/>
+        FROM ${resourceIterationDb}
+    </select>
 
 
 </mapper>
